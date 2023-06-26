@@ -41,7 +41,7 @@ describe("GET /api/", () => {
   test("should respond with a 200 status", () => {
     return request(app).get("/api/").expect(200);
   });
-  test("should respond with a a json object matching the json", () => {
+  test("should respond with an object matching the jsonEndpoint", () => {
     return request(app)
       .get("/api/")
       .expect(200)
