@@ -3,7 +3,6 @@ const {
   getApiEndpoints,
   selectArticleById,
 } = require("../models/api-models");
-const { selectTopics, getApiEndpoints } = require("../models/api-models");
 const fs = require("fs/promises");
 
 exports.getTopics = (req, res, next) => {
