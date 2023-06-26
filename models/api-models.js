@@ -5,3 +5,5 @@ exports.selectTopics = () => {
     return rows;
   });
 };
+
+exports.getApiEndpoints = () => {};
