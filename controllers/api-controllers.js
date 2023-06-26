@@ -1,3 +1,7 @@
+const { selectTopics } = require("../models/api-models");
+
 exports.getTopics = (req, res) => {
-  res.status(200).send({});
+  selectTopics().then((topics) => {
+    res.status(200).send({ topics });
+  });
 };
