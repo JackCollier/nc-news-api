@@ -3,6 +3,7 @@ const request = require("supertest");
 const data = require("../db/data/test-data/index");
 const db = require("../db/connection");
 const seed = require("../db/seeds/seed");
+const jsonEndpoint = require("../endpoints.json");
 
 beforeEach(() => seed(data));
 afterAll(() => db.end());
@@ -39,6 +40,15 @@ describe("GET /api/topics", () => {
 describe("GET /api/", () => {
   test("should respond with a 200 status", () => {
     return request(app).get("/api/").expect(200);
+  });
+  test("should respond with a a json object matching the json", () => {
+    return request(app)
+      .get("/api/")
+      .expect(200)
+      .then((data) => {
+        const pasedData = JSON.parse(data.res.text);
+        expect(jsonEndpoint).toMatchObject(pasedData);
+      });
   });
 });
 
