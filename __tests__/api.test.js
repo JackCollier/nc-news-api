@@ -75,6 +75,22 @@ describe("GET /api/articles/:article_id", () => {
         });
       });
   });
+  test("should respond with a 404 status when passed an id which doesn't exist", () => {
+    return request(app)
+      .get("/api/articles/123")
+      .expect(404)
+      .then((body) => {
+        expect(body.error.text).toBe("Article not found");
+      });
+  });
+  test("should respond with a 404 status when passed an id which doesn't exist", () => {
+    return request(app)
+      .get("/api/articles/notanid")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request");
+      });
+  });
 });
 
 describe("Error testing", () => {
