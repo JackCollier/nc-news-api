@@ -33,4 +33,7 @@ describe("GET /api/topics", () => {
         });
       });
   });
+  test("should respond with a 404 status if invalid endpoint", () => {
+    return request(app).get("/api/topic").expect(404);
+  });
 });
