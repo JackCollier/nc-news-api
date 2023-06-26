@@ -1,4 +1,8 @@
-const { selectTopics, getApiEndpoints } = require("../models/api-models");
+const {
+  selectTopics,
+  getApiEndpoints,
+  selectArticleById,
+} = require("../models/api-models");
 
 exports.getTopics = (req, res, next) => {
   selectTopics()
@@ -17,5 +21,8 @@ exports.getApi = (req, res, next) => {
 };
 
 exports.getArticleById = (req, res, next) => {
-  res.status(200).send({});
+  const { article_id } = req.params;
+  selectArticleById(article_id).then((article) => {
+    res.status(200).send({ article });
+  });
 };
