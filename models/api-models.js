@@ -11,6 +11,12 @@ exports.selectArticleById = (article_id) => {
   return db
     .query(`SELECT * FROM articles WHERE article_id = $1`, [article_id])
     .then(({ rows }) => {
+      if (!rows.length) {
+        const error = new Error("No article found with the specified ID");
+        error.status = 404;
+        error.msg = "Article not found";
+        throw error;
+      }
       return rows[0];
     });
 };
