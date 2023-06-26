@@ -37,3 +37,9 @@ describe("GET /api/topics", () => {
     return request(app).get("/api/topic").expect(404);
   });
 });
+
+describe("GET /api/", () => {
+  test("should respond with a 200 status", () => {
+    return request(app).get("/api/").expect(200);
+  });
+});
