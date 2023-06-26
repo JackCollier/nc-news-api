@@ -5,3 +5,7 @@ exports.getTopics = (req, res) => {
     res.status(200).send({ topics });
   });
 };
+
+exports.getApi = (req, res) => {
+  res.status(200).send({});
+};
