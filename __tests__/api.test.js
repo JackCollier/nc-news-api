@@ -31,15 +31,27 @@ describe("GET /api/topics", () => {
           expect(topic).toHaveProperty("slug", expect.any(String));
           expect(topic).toHaveProperty("description", expect.any(String));
         });
+        expect(topics.length).toEqual(3);
       });
-  });
-  test("should respond with a 404 status if invalid endpoint", () => {
-    return request(app).get("/api/topic").expect(404);
   });
 });
 
 describe("GET /api/", () => {
   test("should respond with a 200 status", () => {
     return request(app).get("/api/").expect(200);
+  });
+});
+
+describe("Error testing", () => {
+  test("GET should respond with a 404 status if invalid endpoint", () => {
+    return request(app).get("/api/topic").expect(404);
+  });
+  test("404: when passed wrong type should respond with err msg", () => {
+    return request(app)
+      .get("/ap/nonsense")
+      .expect(404)
+      .then((body) => {
+        expect(body.res.statusMessage).toBe("Not Found");
+      });
   });
 });
