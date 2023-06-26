@@ -6,9 +6,3 @@ exports.selectTopics = () => {
     return rows;
   });
 };
-
-exports.getApiEndpoints = () => {
-  return fs.readFile("endpoints.json", "utf-8").then((data) => {
-    return data;
-  });
-};
