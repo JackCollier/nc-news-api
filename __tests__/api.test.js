@@ -51,6 +51,48 @@ describe("GET /api/", () => {
   });
 });
 
+describe("GET /api/articles/:article_id", () => {
+  test("should respond with a 200 status", () => {
+    return request(app).get("/api/articles/1").expect(200);
+  });
+  test("should respond with an object article containing the passed id", () => {
+    return request(app)
+      .get("/api/articles/1")
+      .expect(200)
+      .then(({ body }) => {
+        const { article } = body;
+        expect(body).toHaveProperty("article", expect.any(Object));
+        expect(article).toMatchObject({
+          article_id: 1,
+          title: "Living in the shadow of a great man",
+          topic: "mitch",
+          author: "butter_bridge",
+          body: "I find this existence challenging",
+          created_at: "2020-07-09T20:11:00.000Z",
+          votes: 100,
+          article_img_url:
+            "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+        });
+      });
+  });
+  test("should respond with a 404 status when passed an id which doesn't exist", () => {
+    return request(app)
+      .get("/api/articles/123")
+      .expect(404)
+      .then((body) => {
+        expect(body.error.text).toBe("Article not found");
+      });
+  });
+  test("should respond with a 400 status when passed a string", () => {
+    return request(app)
+      .get("/api/articles/notanid")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request");
+      });
+  });
+});
+
 describe("Error testing", () => {
   test("GET should respond with a 404 status if invalid endpoint", () => {
     return request(app).get("/api/topic").expect(404);

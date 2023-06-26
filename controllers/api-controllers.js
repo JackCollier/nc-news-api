@@ -1,4 +1,8 @@
-const { selectTopics, getApiEndpoints } = require("../models/api-models");
+const {
+  selectTopics,
+  getApiEndpoints,
+  selectArticleById,
+} = require("../models/api-models");
 const fs = require("fs/promises");
 
 exports.getTopics = (req, res, next) => {
@@ -14,6 +18,17 @@ exports.getApi = (req, res, next) => {
     .readFile("endpoints.json", "utf-8")
     .then((data) => {
       res.status(200).send(JSON.parse(data));
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+
+exports.getArticleById = (req, res, next) => {
+  const { article_id } = req.params;
+  selectArticleById(article_id)
+    .then((article) => {
+      res.status(200).send({ article });
     })
     .catch((err) => {
       next(err);
