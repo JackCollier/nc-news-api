@@ -2,6 +2,7 @@ const {
   selectTopics,
   getApiEndpoints,
   selectArticleById,
+  selectArticles,
 } = require("../models/api-models");
 const fs = require("fs/promises");
 
@@ -36,5 +37,9 @@ exports.getArticleById = (req, res, next) => {
 };
 
 exports.getArticles = (req, res, next) => {
-  res.status(200).send({});
+  selectArticles()
+    .then((articles) => {
+      res.status(200).send({ articles });
+    })
+    .catch((err) => next(err));
 };
