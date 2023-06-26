@@ -93,6 +93,12 @@ describe("GET /api/articles/:article_id", () => {
   });
 });
 
+describe("GET /api/articles", () => {
+  test("should respond with 200 status", () => {
+    return request(app).get("/api/articles").expect(200);
+  });
+});
+
 describe("Error testing", () => {
   test("GET should respond with a 404 status if invalid endpoint", () => {
     return request(app).get("/api/topic").expect(404);
