@@ -83,7 +83,7 @@ describe("GET /api/articles/:article_id", () => {
         expect(body.error.text).toBe("Article not found");
       });
   });
-  test("should respond with a 404 status when passed an id which doesn't exist", () => {
+  test("should respond with a 400 status when passed a string", () => {
     return request(app)
       .get("/api/articles/notanid")
       .expect(400)
