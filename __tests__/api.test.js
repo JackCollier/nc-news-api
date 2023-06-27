@@ -160,11 +160,12 @@ describe("GET /api/articles/:article_id/comments", () => {
         });
       });
   });
-  test("should respond with an error message comments not found when no comments are found on a happy path", () => {
+  test("should respond with an empty array if article exists but has no comments", () => {
     return request(app)
       .get("/api/articles/4/comments")
-      .then((body) => {
-        expect(body.error.text).toBe("Comments not found");
+      .then(({ body }) => {
+        const { comments } = body;
+        expect(comments.length).toEqual(0);
       });
   });
   test("should be ordered by created_at ascending", () => {
@@ -180,7 +181,7 @@ describe("GET /api/articles/:article_id/comments", () => {
       .get("/api/articles/123/comments")
       .expect(404)
       .then((body) => {
-        expect(body.error.text).toBe("Comments not found");
+        expect(body.error.text).toBe("Resource not found");
       });
   });
   test("should respond with a 400 status when passed a string", () => {
