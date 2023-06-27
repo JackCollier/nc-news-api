@@ -1,5 +1,6 @@
 const db = require("../db/connection");
 const fs = require("fs/promises");
+const { createRef } = require("../db/seeds/utils");
 
 exports.selectTopics = () => {
   return db.query("SELECT * FROM topics;").then(({ rows }) => {
@@ -19,4 +20,29 @@ exports.selectArticleById = (article_id) => {
       }
       return rows[0];
     });
+};
+
+exports.selectArticles = () => {
+  return db
+    .query(
+      `
+      SELECT 
+      articles.article_id,
+      articles.title,
+      articles.created_at,
+      articles.topic,
+      articles.author,
+      articles.article_img_url,
+      COALESCE(COUNT(comments.article_id), 0) AS comment_count
+      FROM
+      articles
+      LEFT JOIN
+      comments ON articles.article_id = comments.article_id
+      GROUP BY
+      articles.article_id
+      ORDER BY
+      articles.created_at DESC;
+      `
+    )
+    .then(({ rows }) => rows);
 };

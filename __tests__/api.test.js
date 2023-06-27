@@ -93,6 +93,46 @@ describe("GET /api/articles/:article_id", () => {
   });
 });
 
+describe("GET /api/articles", () => {
+  test("should respond with 200 status", () => {
+    return request(app).get("/api/articles").expect(200);
+  });
+  test("should respond with an array of articles", () => {
+    return request(app)
+      .get("/api/articles")
+      .then(({ body }) => {
+        expect(body).toHaveProperty("articles", expect.any(Array));
+      });
+  });
+  test("array should contain object with correct properties", () => {
+    return request(app)
+      .get("/api/articles")
+      .then(({ body }) => {
+        const { articles } = body;
+        expect(body).toHaveProperty("articles", expect.any(Array));
+        expect(typeof articles).toBe("object");
+        articles.forEach((article) => {
+          expect(article).toHaveProperty("title", expect.any(String));
+          expect(article).toHaveProperty("topic", expect.any(String));
+          expect(article).toHaveProperty("author", expect.any(String));
+          expect(article).not.toHaveProperty("body");
+          expect(article).toHaveProperty("created_at", expect.any(String));
+          expect(article).toHaveProperty("article_img_url", expect.any(String));
+          expect(article).toHaveProperty("comment_count", expect.any(String));
+        });
+        expect(articles.length).toEqual(13);
+      });
+  });
+  test("should be ordered by date descending", () => {
+    return request(app)
+      .get("/api/articles")
+      .then(({ body }) => {
+        const { articles } = body;
+        expect(articles).toBeSortedBy("created_at", { descending: true });
+      });
+  });
+});
+
 describe("Error testing", () => {
   test("GET should respond with a 404 status if invalid endpoint", () => {
     return request(app).get("/api/topic").expect(404);
