@@ -154,7 +154,6 @@ describe("POST /api/articles/:article_id/comments", () => {
       .send(testComment)
       .then(({ body }) => {
         const { comment } = body;
-        console.log(comment);
         expect(comment).toHaveProperty("comment_id", 19);
         expect(comment).toHaveProperty("body", "Northcoders Bootcamp");
         expect(comment).toHaveProperty("article_id", 1);
