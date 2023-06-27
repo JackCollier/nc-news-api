@@ -23,30 +23,33 @@ exports.selectArticleById = (article_id) => {
 };
 
 exports.selectArticles = () => {
-  let articles;
   return db
-    .query("SELECT * FROM articles;")
-    .then(({ rows }) => {
-      articles = rows;
-      return db.query(`
-      SELECT article_id, COUNT(*) AS comment_count
-      FROM comments
-      GROUP BY article_id;
-      `);
-    })
-    .then(({ rows }) => {
-      const lookUp = createRef(rows, "article_id", "comment_count");
-      const mappedArticle = articles.map((article) => {
-        const articleCopy = { ...article };
-        const commentCount = lookUp[articleCopy.article_id];
-        if (commentCount === undefined) {
-          articleCopy.comment_count = 0;
-        } else {
-          articleCopy.comment_count = +commentCount;
-        }
-        delete articleCopy.body;
-        return articleCopy;
-      });
-      return mappedArticle.sort((a, b) => b.created_at - a.created_at);
-    });
+    .query(
+      `
+      SELECT 
+      articles.article_id,
+      articles.title,
+      articles.created_at,
+      articles.topic,
+      articles.author,
+      articles.article_img_url,
+      COALESCE(comment_counts.comment_count, 0) AS comment_count
+      FROM
+      articles
+      LEFT JOIN
+      (
+        SELECT
+        article_id,
+      COUNT(*) AS comment_count
+      FROM
+      comments
+      GROUP BY
+      article_id
+      )
+      AS comment_counts ON articles.article_id = comment_counts.article_id
+      ORDER BY
+      articles.created_at DESC;
+      `
+    )
+    .then(({ rows }) => rows);
 };
