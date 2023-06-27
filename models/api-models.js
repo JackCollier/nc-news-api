@@ -1,6 +1,7 @@
 const db = require("../db/connection");
 const fs = require("fs/promises");
-const { createRef } = require("../db/seeds/utils");
+const { checkExists } = require("../db/seeds/utils");
+const format = require("pg-format");
 
 exports.selectTopics = () => {
   return db.query("SELECT * FROM topics;").then(({ rows }) => {
@@ -61,13 +62,6 @@ exports.selectCommentById = (article_id) => {
       [article_id]
     )
     .then(({ rows }) => {
-      if (!rows.length) {
-        return Promise.reject({
-          message: "No comments found with the specified ID",
-          status: 404,
-          msg: "Comments not found",
-        });
-      }
       return rows;
     });
 };
