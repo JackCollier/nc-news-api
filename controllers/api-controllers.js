@@ -43,3 +43,7 @@ exports.getArticles = (req, res, next) => {
     })
     .catch((err) => next(err));
 };
+
+exports.postComment = (req, res, next) => {
+  res.status(201).send({});
+};
