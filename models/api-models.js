@@ -1,5 +1,6 @@
 const db = require("../db/connection");
 const fs = require("fs/promises");
+const { createRef } = require("../db/seeds/utils");
 
 exports.selectTopics = () => {
   return db.query("SELECT * FROM topics;").then(({ rows }) => {
@@ -22,7 +23,27 @@ exports.selectArticleById = (article_id) => {
 };
 
 exports.selectArticles = () => {
-  return db.query("SELECT * FROM articles;").then(({ rows }) => {
-    return rows;
-  });
+  let articles;
+  return db
+    .query("SELECT * FROM articles;")
+    .then(({ rows }) => {
+      articles = rows;
+      return db.query(`
+      SELECT article_id, COUNT(*) AS comment_count
+      FROM comments
+      GROUP BY article_id;
+      `);
+    })
+    .then(({ rows }) => {
+      const lookUp = createRef(rows, "article_id", "comment_count");
+      return articles.map((article) => {
+        const commentCount = lookUp[article.article_id];
+        if (commentCount === undefined) {
+          article.comment_count = 0;
+        } else {
+          article.comment_count = +commentCount;
+        }
+        return article;
+      });
+    });
 };
