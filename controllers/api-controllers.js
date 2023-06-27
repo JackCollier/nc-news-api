@@ -3,6 +3,7 @@ const {
   getApiEndpoints,
   selectArticleById,
   selectArticles,
+  selectCommentById,
 } = require("../models/api-models");
 const fs = require("fs/promises");
 
@@ -45,5 +46,12 @@ exports.getArticles = (req, res, next) => {
 };
 
 exports.getCommentsById = (req, res, next) => {
-  res.status(200).send({});
+  const { article_id } = req.params;
+  selectCommentById(article_id)
+    .then((comments) => {
+      res.status(200).send({ comments });
+    })
+    .catch((err) => {
+      next(err);
+    });
 };
