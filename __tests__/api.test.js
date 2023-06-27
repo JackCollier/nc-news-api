@@ -137,7 +137,7 @@ describe("GET /api/articles/:article_id/comments", () => {
   test("should return 200 status", () => {
     return request(app).get("/api/articles/1/comments").expect(200);
   });
-  test("should respond with an array of comments for the given article_id", () => {
+  test("should respond with an array attached to the key of comments", () => {
     return request(app)
       .get("/api/articles/1/comments")
       .then(({ body }) => {
@@ -152,11 +152,19 @@ describe("GET /api/articles/:article_id/comments", () => {
         expect(comments.length).toEqual(11);
         comments.forEach((comment) => {
           expect(comment).toHaveProperty("comment_id", expect.any(Number));
+          expect(comment).toHaveProperty("article_id", expect.any(Number));
           expect(comment).toHaveProperty("votes", expect.any(Number));
           expect(comment).toHaveProperty("author", expect.any(String));
           expect(comment).toHaveProperty("body", expect.any(String));
           expect(comment).toHaveProperty("created_at", expect.any(String));
         });
+      });
+  });
+  test("should respond with an error message comments not found", () => {
+    return request(app)
+      .get("/api/articles/4/comments")
+      .then((body) => {
+        expect(body.error.text).toBe("Comments not found");
       });
   });
   test("should be ordered by created_at ascending", () => {
