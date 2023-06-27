@@ -36,7 +36,7 @@ exports.selectArticles = () => {
     })
     .then(({ rows }) => {
       const lookUp = createRef(rows, "article_id", "comment_count");
-      return articles.map((article) => {
+      const mappedArticle = articles.map((article) => {
         const articleCopy = { ...article };
         const commentCount = lookUp[articleCopy.article_id];
         if (commentCount === undefined) {
@@ -47,5 +47,6 @@ exports.selectArticles = () => {
         delete articleCopy.body;
         return articleCopy;
       });
+      return mappedArticle.sort((a, b) => b.created_at - a.created_at);
     });
 };
