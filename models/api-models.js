@@ -46,3 +46,18 @@ exports.selectArticles = () => {
     )
     .then(({ rows }) => rows);
 };
+
+exports.insertComment = (comment, article_id) => {
+  const { username, body } = comment;
+  console.log(comment);
+  console.log(article_id);
+  return db
+    .query(
+      `INSERT INTO comments (author, body, article_id) VALUES ($1, $2, $3) RETURNING *;`,
+      [username, body, article_id]
+    )
+    .then(({ rows }) => {
+      console.log(rows);
+      return rows[0];
+    });
+};
