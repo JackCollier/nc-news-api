@@ -62,10 +62,11 @@ exports.selectCommentById = (article_id) => {
     )
     .then(({ rows }) => {
       if (!rows.length) {
-        const error = new Error("No comments found with the specified ID");
-        error.status = 404;
-        error.msg = "Comments not found";
-        throw error;
+        return Promise.reject({
+          message: "No comments found with the specified ID",
+          status: 404,
+          msg: "Comments not found",
+        });
       }
       return rows;
     });

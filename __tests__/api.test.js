@@ -160,7 +160,7 @@ describe("GET /api/articles/:article_id/comments", () => {
         });
       });
   });
-  test("should respond with an error message comments not found", () => {
+  test("should respond with an error message comments not found when no comments are found on a happy path", () => {
     return request(app)
       .get("/api/articles/4/comments")
       .then((body) => {
