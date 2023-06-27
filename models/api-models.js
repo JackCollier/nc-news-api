@@ -37,13 +37,15 @@ exports.selectArticles = () => {
     .then(({ rows }) => {
       const lookUp = createRef(rows, "article_id", "comment_count");
       return articles.map((article) => {
-        const commentCount = lookUp[article.article_id];
+        const articleCopy = { ...article };
+        const commentCount = lookUp[articleCopy.article_id];
         if (commentCount === undefined) {
-          article.comment_count = 0;
+          articleCopy.comment_count = 0;
         } else {
-          article.comment_count = +commentCount;
+          articleCopy.comment_count = +commentCount;
         }
-        return article;
+        delete articleCopy.body;
+        return articleCopy;
       });
     });
 };
