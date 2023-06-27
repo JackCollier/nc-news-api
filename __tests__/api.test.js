@@ -135,7 +135,33 @@ describe("GET /api/articles", () => {
 
 describe("POST /api/articles/:article_id/comments", () => {
   test("should respond with a 201 status", () => {
-    return request(app).post("/api/articles/1/comments").expect(201);
+    const testComment = {
+      username: "icellusedkars",
+      body: "Northcoders Bootcamp",
+    };
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(testComment)
+      .expect(201);
+  });
+  test("should respond with the posted comment", () => {
+    const testComment = {
+      username: "icellusedkars",
+      body: "Northcoders Bootcamp",
+    };
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(testComment)
+      .then(({ body }) => {
+        const { comment } = body;
+        console.log(comment);
+        expect(comment).toHaveProperty("comment_id", 19);
+        expect(comment).toHaveProperty("body", "Northcoders Bootcamp");
+        expect(comment).toHaveProperty("article_id", 1);
+        expect(comment).toHaveProperty("author", "icellusedkars");
+        expect(comment).toHaveProperty("votes", 0);
+        expect(comment).toHaveProperty("created_at", expect.any(String));
+      });
   });
 });
 
