@@ -1,6 +1,7 @@
 const db = require("../db/connection");
 const fs = require("fs/promises");
-const { createRef } = require("../db/seeds/utils");
+const { checkExists } = require("../db/seeds/utils");
+const format = require("pg-format");
 
 exports.selectTopics = () => {
   return db.query("SELECT * FROM topics;").then(({ rows }) => {
@@ -45,4 +46,15 @@ exports.selectArticles = () => {
       `
     )
     .then(({ rows }) => rows);
+};
+
+exports.selectCommentById = (article_id) => {
+  return db
+    .query(
+      `SELECT * FROM comments WHERE article_id = $1 ORDER BY created_at ASC`,
+      [article_id]
+    )
+    .then(({ rows }) => {
+      return rows;
+    });
 };

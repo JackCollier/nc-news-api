@@ -133,6 +133,67 @@ describe("GET /api/articles", () => {
   });
 });
 
+describe("GET /api/articles/:article_id/comments", () => {
+  test("should return 200 status", () => {
+    return request(app).get("/api/articles/1/comments").expect(200);
+  });
+  test("should respond with an array attached to the key of comments", () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .then(({ body }) => {
+        expect(body).toHaveProperty("comments", expect.any(Array));
+      });
+  });
+  test("should respond with an array of comments containing objects with the correct properties and right length", () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .then(({ body }) => {
+        const { comments } = body;
+        expect(comments.length).toEqual(11);
+        comments.forEach((comment) => {
+          expect(comment).toHaveProperty("comment_id", expect.any(Number));
+          expect(comment).toHaveProperty("article_id", expect.any(Number));
+          expect(comment).toHaveProperty("votes", expect.any(Number));
+          expect(comment).toHaveProperty("author", expect.any(String));
+          expect(comment).toHaveProperty("body", expect.any(String));
+          expect(comment).toHaveProperty("created_at", expect.any(String));
+        });
+      });
+  });
+  test("should respond with an empty array if article exists but has no comments", () => {
+    return request(app)
+      .get("/api/articles/4/comments")
+      .then(({ body }) => {
+        const { comments } = body;
+        expect(comments.length).toEqual(0);
+      });
+  });
+  test("should be ordered by created_at ascending", () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .then(({ body }) => {
+        const { comments } = body;
+        expect(comments).toBeSortedBy("created_at");
+      });
+  });
+  test("should respond with a 404 status when passed an id which doesn't exist", () => {
+    return request(app)
+      .get("/api/articles/123/comments")
+      .expect(404)
+      .then((body) => {
+        expect(body.error.text).toBe("Resource not found");
+      });
+  });
+  test("should respond with a 400 status when passed a string", () => {
+    return request(app)
+      .get("/api/articles/notanid/comments")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request");
+      });
+  });
+});
+
 describe("Error testing", () => {
   test("GET should respond with a 404 status if invalid endpoint", () => {
     return request(app).get("/api/topic").expect(404);
