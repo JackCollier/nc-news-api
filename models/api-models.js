@@ -53,3 +53,20 @@ exports.selectArticles = () => {
     )
     .then(({ rows }) => rows);
 };
+
+exports.selectCommentById = (article_id) => {
+  return db
+    .query(
+      `SELECT * FROM comments WHERE article_id = $1 ORDER BY created_at ASC`,
+      [article_id]
+    )
+    .then(({ rows }) => {
+      if (!rows.length) {
+        const error = new Error("No comments found with the specified ID");
+        error.status = 404;
+        error.msg = "Article not found";
+        throw error;
+      }
+      return rows;
+    });
+};
