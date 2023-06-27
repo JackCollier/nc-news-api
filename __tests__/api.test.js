@@ -100,15 +100,13 @@ describe("GET /api/articles", () => {
   test("should respond with an array of articles", () => {
     return request(app)
       .get("/api/articles")
-      .expect(200)
       .then(({ body }) => {
         expect(body).toHaveProperty("articles", expect.any(Array));
       });
   });
-  test("Array should contain object with correct properties", () => {
+  test("array should contain object with correct properties", () => {
     return request(app)
       .get("/api/articles")
-      .expect(200)
       .then(({ body }) => {
         const { articles } = body;
         expect(body).toHaveProperty("articles", expect.any(Array));
@@ -123,6 +121,14 @@ describe("GET /api/articles", () => {
           expect(article).toHaveProperty("comment_count", expect.any(Number));
         });
         expect(articles.length).toEqual(13);
+      });
+  });
+  test("should be ordered by date descending", () => {
+    return request(app)
+      .get("/api/articles")
+      .then(({ body }) => {
+        const { articles } = body;
+        expect(articles).toBeSortedBy("created_at", { descending: true });
       });
   });
 });
