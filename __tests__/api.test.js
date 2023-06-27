@@ -117,7 +117,7 @@ describe("GET /api/articles", () => {
           expect(article).toHaveProperty("title", expect.any(String));
           expect(article).toHaveProperty("topic", expect.any(String));
           expect(article).toHaveProperty("author", expect.any(String));
-          expect(article).toHaveProperty("body", expect.any(String));
+          expect(article).not.toHaveProperty("body");
           expect(article).toHaveProperty("created_at", expect.any(String));
           expect(article).toHaveProperty("article_img_url", expect.any(String));
           expect(article).toHaveProperty("comment_count", expect.any(Number));
