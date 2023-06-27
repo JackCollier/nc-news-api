@@ -167,6 +167,22 @@ describe("GET /api/articles/:article_id/comments", () => {
         expect(comments).toBeSortedBy("created_at");
       });
   });
+  test("should respond with a 404 status when passed an id which doesn't exist", () => {
+    return request(app)
+      .get("/api/articles/123/comments")
+      .expect(404)
+      .then((body) => {
+        expect(body.error.text).toBe("Comments not found");
+      });
+  });
+  test("should respond with a 400 status when passed a string", () => {
+    return request(app)
+      .get("/api/articles/notanid/comments")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request");
+      });
+  });
 });
 
 describe("Error testing", () => {
