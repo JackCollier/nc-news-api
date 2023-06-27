@@ -163,6 +163,31 @@ describe("POST /api/articles/:article_id/comments", () => {
         expect(comment).toHaveProperty("created_at", expect.any(String));
       });
   });
+  test("should respond with a 404 status when no body is passed", () => {
+    return request(app).post("/api/articles/1/comments").expect(404);
+  });
+  test("should respond with a 400 status when passed the wrong data type for id", () => {
+    return request(app).post("/api/articles/stringy/comments").expect(400);
+  });
+  test("should respond with a 400 status when passed a nonexistent username", () => {
+    const testComment = {
+      username: "icel",
+      body: "Northcoders Bootcamp",
+    };
+    return request(app)
+      .post("/api/articles/stringy/comments")
+      .send(testComment)
+      .expect(400);
+  });
+  test("should respond with a 400 status when passed no body", () => {
+    const testComment = {
+      username: "icel",
+    };
+    return request(app)
+      .post("/api/articles/stringy/comments")
+      .send(testComment)
+      .expect(400);
+  });
 });
 
 describe("Error testing", () => {
