@@ -3,6 +3,7 @@ const {
   getApiEndpoints,
   selectArticleById,
   selectArticles,
+  insertComment,
 } = require("../models/api-models");
 const fs = require("fs/promises");
 
@@ -45,5 +46,12 @@ exports.getArticles = (req, res, next) => {
 };
 
 exports.postComment = (req, res, next) => {
-  res.status(201).send({});
+  const { article_id } = req.params;
+  insertComment(req.body, article_id)
+    .then((comment) => {
+      res.status(201).send({ comment });
+    })
+    .catch((err) => {
+      next(err);
+    });
 };
