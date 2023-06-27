@@ -33,20 +33,13 @@ exports.selectArticles = () => {
       articles.topic,
       articles.author,
       articles.article_img_url,
-      COALESCE(comment_counts.comment_count, 0) AS comment_count
+      COALESCE(COUNT(comments.article_id), 0) AS comment_count
       FROM
       articles
       LEFT JOIN
-      (
-        SELECT
-        article_id,
-      COUNT(*) AS comment_count
-      FROM
-      comments
+      comments ON articles.article_id = comments.article_id
       GROUP BY
-      article_id
-      )
-      AS comment_counts ON articles.article_id = comment_counts.article_id
+      articles.article_id
       ORDER BY
       articles.created_at DESC;
       `
