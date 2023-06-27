@@ -137,6 +137,36 @@ describe("GET /api/articles/:article_id/comments", () => {
   test("should return 200 status", () => {
     return request(app).get("/api/articles/1/comments").expect(200);
   });
+  test("should respond with an array of comments for the given article_id", () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .then(({ body }) => {
+        expect(body).toHaveProperty("comments", expect.any(Array));
+      });
+  });
+  test("should respond with an array of comments containing objects with the correct properties and right length", () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .then(({ body }) => {
+        const { comments } = body;
+        expect(comments.length).toEqual(11);
+        comments.forEach((comment) => {
+          expect(comment).toHaveProperty("comment_id", expect.any(Number));
+          expect(comment).toHaveProperty("votes", expect.any(Number));
+          expect(comment).toHaveProperty("author", expect.any(String));
+          expect(comment).toHaveProperty("body", expect.any(String));
+          expect(comment).toHaveProperty("created_at", expect.any(String));
+        });
+      });
+  });
+  test("should be ordered by created_at ascending", () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .then(({ body }) => {
+        const { comments } = body;
+        expect(comments).toBeSortedBy("created_at");
+      });
+  });
 });
 
 describe("Error testing", () => {
