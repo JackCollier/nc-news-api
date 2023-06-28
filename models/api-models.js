@@ -58,3 +58,13 @@ exports.selectCommentById = (article_id) => {
       return rows;
     });
 };
+
+exports.updateArticle = (article_id, body) => {
+  const { inc_votes } = body;
+  return db
+    .query(
+      `UPDATE articles SET votes = votes + $1 WHERE article_id = $2 RETURNING *;`,
+      [inc_votes, article_id]
+    )
+    .then(({ rows }) => rows[0]);
+};
