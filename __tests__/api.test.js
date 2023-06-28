@@ -210,6 +210,17 @@ describe("PATCH /api/articles/:article_id", () => {
         expect(article).toHaveProperty("votes", 101);
       });
   });
+  test("should respond with the article votes updated by -1", () => {
+    const patch = { inc_votes: -1 };
+    return request(app)
+      .patch("/api/articles/1")
+      .send(patch)
+      .then(({ body }) => {
+        const { article } = body;
+        expect(article).toHaveProperty("article_id", 1);
+        expect(article).toHaveProperty("votes", 99);
+      });
+  });
 });
 
 describe("Error testing", () => {
