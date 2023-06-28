@@ -59,3 +59,8 @@ exports.getCommentsById = (req, res, next) => {
     })
     .catch(next);
 };
+
+exports.patchArticleById = (req, res, next) => {
+  const { article_id } = req.params;
+  res.status(200).send({});
+};
