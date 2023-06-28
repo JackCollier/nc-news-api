@@ -221,6 +221,14 @@ describe("PATCH /api/articles/:article_id", () => {
         expect(article).toHaveProperty("votes", 99);
       });
   });
+  test("should respond with a 400 when passed an invalid id", () => {
+    const patch = { inc_votes: -1 };
+    return request(app).patch("/api/articles/notanid").send(patch).expect(400);
+  });
+  test("should respond with a 404 when passed a valid id but no resource found", () => {
+    const patch = { inc_votes: -1 };
+    return request(app).patch("/api/articles/1234").send(patch).expect(404);
+  });
 });
 
 describe("Error testing", () => {
