@@ -23,7 +23,7 @@ app.post("/api/articles/:article_id/comments", postComment);
 app.get("/api/articles/:article_id/comments", getCommentsById);
 
 app.use((err, req, res, next) => {
-  if (err.code === "22P02") {
+  if (err.code === "22P02" || err.code === "23502") {
     res.status(400).send({ msg: "Bad request" });
   } else if (err.status && err.msg) {
     res.status(err.status).send(err.msg);
