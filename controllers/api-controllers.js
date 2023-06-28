@@ -63,11 +63,14 @@ exports.getCommentsById = (req, res, next) => {
 
 exports.patchArticleById = (req, res, next) => {
   const { article_id } = req.params;
-  updateArticle(article_id, req.body)
-    .then((article) => {
+  const promises = [
+    updateArticle(article_id, req.body),
+    checkExists("articles", "article_id", article_id),
+  ];
+  Promise.all(promises)
+    .then((responseArray) => {
+      const article = responseArray[0];
       res.status(200).send({ article });
     })
-    .catch((err) => {
-      next(err);
-    });
+    .catch(next);
 };
