@@ -6,6 +6,7 @@ const {
   selectArticles,
   insertComment,
   selectCommentById,
+  updateArticle,
 } = require("../models/api-models");
 const fs = require("fs/promises");
 
@@ -68,6 +69,20 @@ exports.getCommentsById = (req, res, next) => {
     .then((responseArray) => {
       const comments = responseArray[0];
       res.status(200).send({ comments });
+    })
+    .catch(next);
+};
+
+exports.patchArticleById = (req, res, next) => {
+  const { article_id } = req.params;
+  const promises = [
+    updateArticle(article_id, req.body),
+    checkExists("articles", "article_id", article_id),
+  ];
+  Promise.all(promises)
+    .then((responseArray) => {
+      const article = responseArray[0];
+      res.status(200).send({ article });
     })
     .catch(next);
 };

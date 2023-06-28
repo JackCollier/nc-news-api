@@ -257,6 +257,47 @@ describe("GET /api/articles/:article_id/comments", () => {
   });
 });
 
+describe("PATCH /api/articles/:article_id", () => {
+  test("should respond with a 200 status", () => {
+    const patch = { inc_votes: 1 };
+    return request(app).patch("/api/articles/1").send(patch).expect(200);
+  });
+  test("should respond with the article votes updated by 1", () => {
+    const patch = { inc_votes: 1 };
+    return request(app)
+      .patch("/api/articles/1")
+      .send(patch)
+      .then(({ body }) => {
+        const { article } = body;
+        expect(article).toHaveProperty("article_id", 1);
+        expect(article).toHaveProperty("votes", 101);
+      });
+  });
+  test("should respond with the article votes updated by -1", () => {
+    const patch = { inc_votes: -1 };
+    return request(app)
+      .patch("/api/articles/1")
+      .send(patch)
+      .then(({ body }) => {
+        const { article } = body;
+        expect(article).toHaveProperty("article_id", 1);
+        expect(article).toHaveProperty("votes", 99);
+      });
+  });
+  test("should respond with a 400 when passed an invalid id", () => {
+    const patch = { inc_votes: -1 };
+    return request(app).patch("/api/articles/notanid").send(patch).expect(400);
+  });
+  test("should respond with a 404 when passed a valid id but no resource found", () => {
+    const patch = { inc_votes: -1 };
+    return request(app).patch("/api/articles/1234").send(patch).expect(404);
+  });
+  test("should respond with a 400 when passed an invalid body value", () => {
+    const patch = { inc_votes: "abc" };
+    return request(app).patch("/api/articles/notanid").send(patch).expect(400);
+  });
+});
+
 describe("Error testing", () => {
   test("GET should respond with a 404 status if invalid endpoint", () => {
     return request(app).get("/api/topic").expect(404);
