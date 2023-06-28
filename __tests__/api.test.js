@@ -229,6 +229,10 @@ describe("PATCH /api/articles/:article_id", () => {
     const patch = { inc_votes: -1 };
     return request(app).patch("/api/articles/1234").send(patch).expect(404);
   });
+  test("should respond with a 400 when passed an invalid body value", () => {
+    const patch = { inc_votes: "abc" };
+    return request(app).patch("/api/articles/notanid").send(patch).expect(400);
+  });
 });
 
 describe("Error testing", () => {
