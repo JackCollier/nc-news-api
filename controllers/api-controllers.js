@@ -7,6 +7,7 @@ const {
   insertComment,
   selectCommentById,
   updateArticle,
+  deleteComment,
 } = require("../models/api-models");
 const fs = require("fs/promises");
 
@@ -88,5 +89,21 @@ exports.patchArticleById = (req, res, next) => {
 };
 
 exports.deleteCommentById = (req, res, next) => {
-  res.status(204).send({});
+  const { comment_id } = req.params;
+  const promises = [
+    deleteComment(comment_id),
+    checkExists("comments", "comment_id", comment_id),
+  ];
+  Promise.all(promises)
+    .then(() => {
+      res.status(204).send({});
+    })
+    .catch(next);
+  // deleteComment(comment_id)
+  //   .then(() => {
+  //     res.status(204).send({});
+  //   })
+  //   .catch((err) => {
+  //     next(err);
+  //   });
 };
