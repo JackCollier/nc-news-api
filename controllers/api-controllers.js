@@ -86,3 +86,7 @@ exports.patchArticleById = (req, res, next) => {
     })
     .catch(next);
 };
+
+exports.deleteCommentById = (req, res, next) => {
+  res.status(204).send({});
+};
