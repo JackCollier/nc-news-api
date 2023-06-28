@@ -133,6 +133,69 @@ describe("GET /api/articles", () => {
   });
 });
 
+describe("POST /api/articles/:article_id/comments", () => {
+  test("should respond with a 201 status", () => {
+    const testComment = {
+      username: "icellusedkars",
+      body: "Northcoders Bootcamp",
+    };
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(testComment)
+      .expect(201);
+  });
+  test("should respond with the posted comment", () => {
+    const testComment = {
+      username: "icellusedkars",
+      body: "Northcoders Bootcamp",
+    };
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(testComment)
+      .then(({ body }) => {
+        const { comment } = body;
+        expect(comment).toHaveProperty("comment_id", 19);
+        expect(comment).toHaveProperty("body", "Northcoders Bootcamp");
+        expect(comment).toHaveProperty("article_id", 1);
+        expect(comment).toHaveProperty("author", "icellusedkars");
+        expect(comment).toHaveProperty("votes", 0);
+        expect(comment).toHaveProperty("created_at", expect.any(String));
+      });
+  });
+  test("should respond with a 400 status when passed the wrong data type for id", () => {
+    return request(app).post("/api/articles/stringy/comments").expect(400);
+  });
+  test("should respond with a 404 status when passed a nonexistent username", () => {
+    const testComment = {
+      username: "fakeusername",
+      body: "Northcoders Bootcamp",
+    };
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(testComment)
+      .expect(404);
+  });
+  test("should respond with a 400 status when passed no body", () => {
+    const testComment = {
+      username: "icel",
+    };
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(testComment)
+      .expect(400);
+  });
+  test("should respond with a 404 status when passed an id which is valid but doesn't exist", () => {
+    const testComment = {
+      username: "fakeusername",
+      body: "Northcoders Bootcamp",
+    };
+    return request(app)
+      .post("/api/articles/1232/comments")
+      .send(testComment)
+      .expect(404);
+  });
+});
+
 describe("GET /api/articles/:article_id/comments", () => {
   test("should return 200 status", () => {
     return request(app).get("/api/articles/1/comments").expect(200);

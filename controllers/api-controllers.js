@@ -4,6 +4,7 @@ const {
   getApiEndpoints,
   selectArticleById,
   selectArticles,
+  insertComment,
   selectCommentById,
   updateArticle,
 } = require("../models/api-models");
@@ -45,6 +46,17 @@ exports.getArticles = (req, res, next) => {
       res.status(200).send({ articles });
     })
     .catch((err) => next(err));
+};
+
+exports.postComment = (req, res, next) => {
+  const { article_id } = req.params;
+  insertComment(req.body, article_id)
+    .then((comment) => {
+      res.status(201).send({ comment });
+    })
+    .catch((err) => {
+      next(err);
+    });
 };
 
 exports.getCommentsById = (req, res, next) => {

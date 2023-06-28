@@ -55,6 +55,19 @@
       }
     }
   },
+  "POST /api/articles/:article_id/comments": {
+    "description": "adds a new comment to the db attached with an article by id",
+    "queries": [],
+    "exampleResponse": {
+      "comment": {
+        "body": "This is a bad article name",
+        "votes": 1,
+        "author": "butter_bridge",
+        "article_id": 6,
+        "created_at": 1602433380000
+      }
+    }
+  },
   "PATCH /api/articles/:article_id": {
     "description": "updates article vote count and returns said article",
     "queries": [],
