@@ -194,6 +194,13 @@ describe("GET /api/articles/:article_id/comments", () => {
   });
 });
 
+describe("PATCH /api/articles/:article_id", () => {
+  test("should respond with a 200 status", () => {
+    const body = { inc_votes: 1 };
+    return request(app).patch("/api/articles/1").send(body).expect(200);
+  });
+});
+
 describe("Error testing", () => {
   test("GET should respond with a 404 status if invalid endpoint", () => {
     return request(app).get("/api/topic").expect(404);
