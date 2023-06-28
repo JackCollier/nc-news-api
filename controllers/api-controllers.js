@@ -1,9 +1,11 @@
+const { checkExists } = require("../db/seeds/utils");
 const {
   selectTopics,
   getApiEndpoints,
   selectArticleById,
   selectArticles,
   insertComment,
+  selectCommentById,
 } = require("../models/api-models");
 const fs = require("fs/promises");
 
@@ -54,4 +56,18 @@ exports.postComment = (req, res, next) => {
     .catch((err) => {
       next(err);
     });
+};
+
+exports.getCommentsById = (req, res, next) => {
+  const { article_id } = req.params;
+  const promises = [
+    selectCommentById(article_id),
+    checkExists("articles", "article_id", article_id),
+  ];
+  Promise.all(promises)
+    .then((responseArray) => {
+      const comments = responseArray[0];
+      res.status(200).send({ comments });
+    })
+    .catch(next);
 };
