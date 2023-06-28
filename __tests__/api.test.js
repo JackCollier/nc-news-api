@@ -299,8 +299,14 @@ describe("PATCH /api/articles/:article_id", () => {
 });
 
 describe("DELETE /api/comments/:comment_id", () => {
-  test("should respond with a 204 status", () => {
+  test("should respond with a 204 status on valid Id", () => {
     return request(app).delete("/api/comments/1").expect(204);
+  });
+  test("should respond with a 404 status on valid Id which doesn't exist", () => {
+    return request(app).delete("/api/comments/1231").expect(404);
+  });
+  test("should respond with a 400 status on invalid Id", () => {
+    return request(app).delete("/api/comments/fakeId").expect(400);
   });
 });
 
