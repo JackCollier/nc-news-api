@@ -122,3 +122,11 @@ exports.selectUsers = () => {
 exports.deleteComment = (comment_id) => {
   return db.query(`DELETE FROM comments WHERE comment_id = $1;`, [comment_id]);
 };
+
+exports.selectUserByUsername = (username) => {
+  return db
+    .query(`SELECT * FROM users WHERE username = $1`, [username])
+    .then(({ rows }) => {
+      return rows[0];
+    });
+};
