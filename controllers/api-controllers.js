@@ -8,6 +8,7 @@ const {
   selectCommentById,
   updateArticle,
   selectUsers,
+  deleteComment,
 } = require("../models/api-models");
 const fs = require("fs/promises");
 
@@ -96,4 +97,17 @@ exports.getUsers = (req, res, next) => {
     .catch((err) => {
       next(err);
     });
+};
+
+exports.deleteCommentById = (req, res, next) => {
+  const { comment_id } = req.params;
+  const promises = [
+    deleteComment(comment_id),
+    checkExists("comments", "comment_id", comment_id),
+  ];
+  Promise.all(promises)
+    .then(() => {
+      res.status(204).send();
+    })
+    .catch(next);
 };
