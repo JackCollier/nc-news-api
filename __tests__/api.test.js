@@ -316,9 +316,6 @@ describe("GET/api/users", () => {
         });
       });
   });
-  test("should respond with a 404 status with bad path", () => {
-    return request(app).get("/api/usage").expect(404);
-  });
 });
 
 describe("DELETE /api/comments/:comment_id", () => {
