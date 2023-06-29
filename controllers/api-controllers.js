@@ -86,3 +86,7 @@ exports.patchArticleById = (req, res, next) => {
     })
     .catch(next);
 };
+
+exports.getUsers = (req, res, next) => {
+  res.status(200).send({});
+};
