@@ -134,6 +134,7 @@ describe("GET /api/articles", () => {
   test("should be filtered by topic mitch", () => {
     return request(app)
       .get("/api/articles?topic=mitch")
+      .expect(200)
       .then(({ body }) => {
         const { articles } = body;
         expect(articles).toBeSortedBy("topic");
@@ -141,6 +142,15 @@ describe("GET /api/articles", () => {
         articles.forEach((article) => {
           expect(article).toHaveProperty("topic", "mitch");
         });
+      });
+  });
+  test("should return an empty array if valid topic but no articles", () => {
+    return request(app)
+      .get("/api/articles?topic=paper")
+      .expect(200)
+      .then(({ body }) => {
+        const { articles } = body;
+        expect(articles.length).toEqual(0);
       });
   });
   test("should return 404 status when passed no existant topic", () => {
@@ -152,24 +162,26 @@ describe("GET /api/articles", () => {
   test("should be sorted by title", () => {
     return request(app)
       .get("/api/articles?sort_by=title")
+      .expect(200)
       .then(({ body }) => {
         const { articles } = body;
         expect(articles).toBeSortedBy("title", { descending: true });
       });
   });
-  test("should return 404 status when passed a non existant sort_by", () => {
-    return request(app).get("/api/articles?sort_by=jeff").expect(404);
+  test("should return 400 status when passed a non existant sort_by", () => {
+    return request(app).get("/api/articles?sort_by=jeff").expect(400);
   });
-  test("should be ordered in ascedning", () => {
+  test("should be ordered in ascending", () => {
     return request(app)
       .get("/api/articles?order=ASC")
+      .expect(200)
       .then(({ body }) => {
         const { articles } = body;
         expect(articles).toBeSortedBy("created_at", { descending: false });
       });
   });
   test("should return 400 status when passed a bad order", () => {
-    return request(app).get("/api/articles?order=up").expect(404);
+    return request(app).get("/api/articles?order=up").expect(400);
   });
 });
 
