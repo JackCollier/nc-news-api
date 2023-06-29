@@ -30,10 +30,8 @@ exports.selectArticleById = (article_id) => {
     });
 };
 
-exports.selectArticles = () => {
-  return db
-    .query(
-      `
+exports.selectArticles = (topic, sort_by = "created_at", order = "DESC") => {
+  let query = `
       SELECT 
       articles.article_id,
       articles.title,
@@ -46,13 +44,40 @@ exports.selectArticles = () => {
       articles
       LEFT JOIN
       comments ON articles.article_id = comments.article_id
-      GROUP BY
-      articles.article_id
-      ORDER BY
-      articles.created_at DESC;
-      `
-    )
-    .then(({ rows }) => rows);
+      `;
+
+  const validSortBy = [
+    "article_id",
+    "title",
+    "created_at",
+    "topic",
+    "author",
+    "article_img_url",
+    "comment_count",
+  ];
+
+  const validOrder = ["ASC", "DESC"];
+
+  if (!validSortBy.includes(sort_by) || !validOrder.includes(order)) {
+    return Promise.reject({ status: 400, msg: "Bad Request" });
+  }
+
+  const queryValues = [];
+
+  if (topic) {
+    query += ` WHERE articles.topic = $1`;
+    queryValues.push(topic);
+  }
+
+  if (sort_by) {
+    query += ` GROUP BY
+      articles.article_id`;
+    query += ` ORDER BY ${sort_by} ${order}`;
+  }
+
+  return db.query(query, queryValues).then(({ rows }) => {
+    return rows;
+  });
 };
 
 exports.insertComment = (comment, article_id) => {

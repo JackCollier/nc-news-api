@@ -144,13 +144,65 @@ describe("GET /api/articles", () => {
         expect(articles.length).toEqual(13);
       });
   });
-  test("should be ordered by date descending", () => {
+  test("should be ordered by date descending default", () => {
     return request(app)
       .get("/api/articles")
       .then(({ body }) => {
         const { articles } = body;
         expect(articles).toBeSortedBy("created_at", { descending: true });
       });
+  });
+  test("should be filtered by topic mitch", () => {
+    return request(app)
+      .get("/api/articles?topic=mitch")
+      .expect(200)
+      .then(({ body }) => {
+        const { articles } = body;
+        expect(articles).toBeSortedBy("topic");
+        expect(articles.length).toEqual(12);
+        articles.forEach((article) => {
+          expect(article).toHaveProperty("topic", "mitch");
+        });
+      });
+  });
+  test("should return an empty array if valid topic but no articles", () => {
+    return request(app)
+      .get("/api/articles?topic=paper")
+      .expect(200)
+      .then(({ body }) => {
+        const { articles } = body;
+        expect(articles.length).toEqual(0);
+      });
+  });
+  test("should return 404 status when passed no existant topic", () => {
+    return request(app).get("/api/articles?topic=dogfood").expect(404);
+  });
+  test("should return 400 status when passed an invalid topic", () => {
+    return request(app).get("/api/articles?topic=1223").expect(404);
+  });
+  test("should be sorted by title", () => {
+    return request(app)
+      .get("/api/articles?sort_by=title")
+      .expect(200)
+      .then(({ body }) => {
+        const { articles } = body;
+        expect(articles).toBeSortedBy("title", { descending: true });
+      });
+  });
+  test("should return 400 status when passed a non existant sort_by", () => {
+    return request(app).get("/api/articles?sort_by=jeff").expect(400);
+  });
+  test("should be ordered in ascending", () => {
+    return request(app)
+      .get("/api/articles?order=ASC")
+      .expect(200)
+      .then(({ body }) => {
+        const { articles } = body;
+        expect(articles).toBeSortedBy("created_at", { descending: false });
+      });
+  });
+  test("should return 400 status when passed a bad order", () => {
+    return request(app).get("/api/articles?order=up").expect(400);
   });
 });
 

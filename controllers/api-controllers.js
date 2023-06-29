@@ -43,11 +43,17 @@ exports.getArticleById = (req, res, next) => {
 };
 
 exports.getArticles = (req, res, next) => {
-  selectArticles()
-    .then((articles) => {
+  const { topic, sort_by, order } = req.query;
+  const promises = [selectArticles(topic, sort_by, order)];
+  if (topic) {
+    promises.push(checkExists("topics", "slug", topic));
+  }
+  Promise.all(promises)
+    .then((responses) => {
+      const articles = responses[0];
       res.status(200).send({ articles });
     })
-    .catch((err) => next(err));
+    .catch(next);
 };
 
 exports.postComment = (req, res, next) => {
