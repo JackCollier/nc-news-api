@@ -11,7 +11,14 @@ exports.selectTopics = () => {
 
 exports.selectArticleById = (article_id) => {
   return db
-    .query(`SELECT * FROM articles WHERE article_id = $1`, [article_id])
+    .query(
+      `SELECT a.*, (SELECT COUNT(*) FROM comments WHERE article_id = a.article_id) AS comment_count
+       FROM articles a
+       WHERE a.article_id = $1
+       ORDER BY a.created_at ASC;
+      `,
+      [article_id]
+    )
     .then(({ rows }) => {
       if (!rows.length) {
         const error = new Error("No article found with the specified ID");
