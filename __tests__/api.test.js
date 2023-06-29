@@ -123,12 +123,34 @@ describe("GET /api/articles", () => {
         expect(articles.length).toEqual(13);
       });
   });
-  test("should be ordered by date descending", () => {
+  test("should be ordered by date descending default", () => {
     return request(app)
       .get("/api/articles")
       .then(({ body }) => {
         const { articles } = body;
         expect(articles).toBeSortedBy("created_at", { descending: true });
+      });
+  });
+  test("should be filtered by topic cats", () => {
+    return request(app)
+      .get("/api/articles?topic=cats")
+      .then(({ body }) => {
+        const { articles } = body;
+        expect(articles).toBeSortedBy("topic");
+        articles.forEach((article) => {
+          expect(article).toHaveProperty("topic", "cats");
+        });
+      });
+  });
+  test("should be filtered by topic mitch", () => {
+    return request(app)
+      .get("/api/articles?topic=mitch")
+      .then(({ body }) => {
+        const { articles } = body;
+        expect(articles).toBeSortedBy("topic");
+        articles.forEach((article) => {
+          expect(article).toHaveProperty("topic", "mitch");
+        });
       });
   });
 });
