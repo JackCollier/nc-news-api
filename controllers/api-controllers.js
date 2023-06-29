@@ -54,11 +54,6 @@ exports.getArticles = (req, res, next) => {
       res.status(200).send({ articles });
     })
     .catch(next);
-  // selectArticles(topic, sort_by, order)
-  //   .then((articles) => {
-  //     res.status(200).send({ articles });
-  //   })
-  //   .catch((err) => next(err));
 };
 
 exports.postComment = (req, res, next) => {
