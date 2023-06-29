@@ -111,3 +111,8 @@ exports.deleteCommentById = (req, res, next) => {
     })
     .catch(next);
 };
+
+exports.getUserByUsername = (req, res, next) => {
+  const { username } = req.params;
+  res.status(200).send();
+};
