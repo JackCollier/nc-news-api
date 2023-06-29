@@ -52,7 +52,7 @@ exports.selectArticles = (topic, sort_by = "created_at", order = "DESC") => {
   const validOrder = ["ASC", "DESC"];
 
   if (!validSortBy.includes(sort_by) || !validOrder.includes(order)) {
-    return Promise.reject({ status: 400, mesg: "Bad Request" });
+    return Promise.reject({ status: 400, msg: "Bad Request" });
   }
 
   const queryValues = [];
