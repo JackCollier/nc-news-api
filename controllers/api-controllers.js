@@ -96,7 +96,7 @@ exports.deleteCommentById = (req, res, next) => {
   ];
   Promise.all(promises)
     .then(() => {
-      res.status(204).send({});
+      res.status(204).send();
     })
     .catch(next);
   // deleteComment(comment_id)
