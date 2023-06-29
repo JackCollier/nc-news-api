@@ -369,6 +369,9 @@ describe("GET /api/users/:username", () => {
         });
       });
   });
+  test("should respond with a 404 status if username is valid but doesn't exist", () => {
+    return request(app).get("/api/users/Christopher").expect(404);
+  });
 });
 
 describe("Error testing", () => {
