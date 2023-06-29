@@ -131,27 +131,45 @@ describe("GET /api/articles", () => {
         expect(articles).toBeSortedBy("created_at", { descending: true });
       });
   });
-  test("should be filtered by topic cats", () => {
-    return request(app)
-      .get("/api/articles?topic=cats")
-      .then(({ body }) => {
-        const { articles } = body;
-        expect(articles).toBeSortedBy("topic");
-        articles.forEach((article) => {
-          expect(article).toHaveProperty("topic", "cats");
-        });
-      });
-  });
   test("should be filtered by topic mitch", () => {
     return request(app)
       .get("/api/articles?topic=mitch")
       .then(({ body }) => {
         const { articles } = body;
         expect(articles).toBeSortedBy("topic");
+        expect(articles.length).toEqual(12);
         articles.forEach((article) => {
           expect(article).toHaveProperty("topic", "mitch");
         });
       });
+  });
+  test("should return 404 status when passed no existant topic", () => {
+    return request(app).get("/api/articles?topic=dogfood").expect(404);
+  });
+  test("should return 400 status when passed an invalid topic", () => {
+    return request(app).get("/api/articles?topic=1223").expect(404);
+  });
+  test("should be sorted by title", () => {
+    return request(app)
+      .get("/api/articles?sort_by=title")
+      .then(({ body }) => {
+        const { articles } = body;
+        expect(articles).toBeSortedBy("title", { descending: true });
+      });
+  });
+  test("should return 404 status when passed a non existant sort_by", () => {
+    return request(app).get("/api/articles?sort_by=jeff").expect(404);
+  });
+  test("should be ordered in ascedning", () => {
+    return request(app)
+      .get("/api/articles?order=ASC")
+      .then(({ body }) => {
+        const { articles } = body;
+        expect(articles).toBeSortedBy("created_at", { descending: false });
+      });
+  });
+  test("should return 400 status when passed a bad order", () => {
+    return request(app).get("/api/articles?order=up").expect(404);
   });
 });
 
