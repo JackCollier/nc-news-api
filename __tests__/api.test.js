@@ -298,6 +298,12 @@ describe("PATCH /api/articles/:article_id", () => {
   });
 });
 
+describe("GET/api/users", () => {
+  test("should respond with a 200 status", () => {
+    return request(app).get("/api/users").expect(200);
+  });
+});
+
 describe("Error testing", () => {
   test("GET should respond with a 404 status if invalid endpoint", () => {
     return request(app).get("/api/topic").expect(404);
