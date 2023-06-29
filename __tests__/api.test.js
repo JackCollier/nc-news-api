@@ -355,6 +355,20 @@ describe("GET /api/users/:username", () => {
   test("should respond with a 200 status", () => {
     return request(app).get("/api/users/lurker").expect(200);
   });
+  test("should respond with a the correct user", () => {
+    return request(app)
+      .get("/api/users/lurker")
+      .expect(200)
+      .then(({ body }) => {
+        const { user } = body;
+        expect(user).toEqual({
+          username: "lurker",
+          name: "do_nothing",
+          avatar_url:
+            "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
+        });
+      });
+  });
 });
 
 describe("Error testing", () => {
