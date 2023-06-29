@@ -44,11 +44,21 @@ exports.getArticleById = (req, res, next) => {
 
 exports.getArticles = (req, res, next) => {
   const { topic, sort_by, order } = req.query;
-  selectArticles(topic, sort_by, order)
-    .then((articles) => {
+  const promises = [selectArticles(topic, sort_by, order)];
+  if (topic) {
+    promises.push(checkExists("articles", "topic", topic));
+  }
+  Promise.all(promises)
+    .then((responses) => {
+      const articles = responses[0];
       res.status(200).send({ articles });
     })
-    .catch((err) => next(err));
+    .catch(next);
+  // selectArticles(topic, sort_by, order)
+  //   .then((articles) => {
+  //     res.status(200).send({ articles });
+  //   })
+  //   .catch((err) => next(err));
 };
 
 exports.postComment = (req, res, next) => {
