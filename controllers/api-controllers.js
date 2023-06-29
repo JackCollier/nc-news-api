@@ -7,6 +7,7 @@ const {
   insertComment,
   selectCommentById,
   updateArticle,
+  selectUsers,
 } = require("../models/api-models");
 const fs = require("fs/promises");
 
@@ -88,5 +89,11 @@ exports.patchArticleById = (req, res, next) => {
 };
 
 exports.getUsers = (req, res, next) => {
-  res.status(200).send({});
+  selectUsers()
+    .then((users) => {
+      res.status(200).send({ users });
+    })
+    .catch((err) => {
+      next(err);
+    });
 };
