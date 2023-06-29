@@ -403,6 +403,29 @@ describe("DELETE /api/comments/:comment_id", () => {
   });
 });
 
+describe("GET /api/users/:username", () => {
+  test("should respond with a 200 status", () => {
+    return request(app).get("/api/users/lurker").expect(200);
+  });
+  test("should respond with a the correct user", () => {
+    return request(app)
+      .get("/api/users/lurker")
+      .expect(200)
+      .then(({ body }) => {
+        const { user } = body;
+        expect(user).toEqual({
+          username: "lurker",
+          name: "do_nothing",
+          avatar_url:
+            "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
+        });
+      });
+  });
+  test("should respond with a 404 status if username is valid but doesn't exist", () => {
+    return request(app).get("/api/users/Christopher").expect(404);
+  });
+});
+
 describe("Error testing", () => {
   test("GET should respond with a 404 status if invalid endpoint", () => {
     return request(app).get("/api/topic").expect(404);
