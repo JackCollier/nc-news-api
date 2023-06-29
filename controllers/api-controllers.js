@@ -99,11 +99,4 @@ exports.deleteCommentById = (req, res, next) => {
       res.status(204).send();
     })
     .catch(next);
-  // deleteComment(comment_id)
-  //   .then(() => {
-  //     res.status(204).send({});
-  //   })
-  //   .catch((err) => {
-  //     next(err);
-  //   });
 };
