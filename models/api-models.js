@@ -39,6 +39,22 @@ exports.selectArticles = (topic, sort_by = "created_at", order = "DESC") => {
       comments ON articles.article_id = comments.article_id
       `;
 
+  const validSortBy = [
+    "article_id",
+    "title",
+    "created_at",
+    "topic",
+    "author",
+    "article_img_url",
+    "comment_count",
+  ];
+
+  const validOrder = ["ASC", "DESC"];
+
+  if (!validSortBy.includes(sort_by) || !validOrder.includes(order)) {
+    return Promise.reject({ status: 400, mesg: "Bad Request" });
+  }
+
   const queryValues = [];
 
   if (topic) {
