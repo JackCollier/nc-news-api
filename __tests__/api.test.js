@@ -302,6 +302,20 @@ describe("GET/api/users", () => {
   test("should respond with a 200 status", () => {
     return request(app).get("/api/users").expect(200);
   });
+  test("should respond with a an array of user objects", () => {
+    return request(app)
+      .get("/api/users")
+      .then(({ body }) => {
+        const { users } = body;
+        expect(body).toHaveProperty("users", expect.any(Array));
+        expect(users.length).toEqual(4);
+        users.forEach((user) => {
+          expect(user).toHaveProperty("username", expect.any(String));
+          expect(user).toHaveProperty("name", expect.any(String));
+          expect(user).toHaveProperty("avatar_url", expect.any(String));
+        });
+      });
+  });
 });
 
 describe("Error testing", () => {
