@@ -372,6 +372,8 @@ describe("PATCH /api/articles/:article_id", () => {
   });
 });
 
+describe("PATCH /api/comments/:comment_id", () => {});
+
 describe("GET/api/users", () => {
   test("should respond with a 200 status", () => {
     return request(app).get("/api/users").expect(200);
