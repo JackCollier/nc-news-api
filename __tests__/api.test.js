@@ -297,6 +297,13 @@ describe("POST /api/topics", () => {
   test("should respond with a 400 status when passed no body", () => {
     return request(app).post("/api/topics").expect(400);
   });
+  test("should respond with a 400 status when passed an invalid body", () => {
+    const post = {
+      name: "blackberries",
+      description: "best berry",
+    };
+    return request(app).post("/api/topics").send(post).expect(400);
+  });
 });
 
 describe("GET /api/articles/:article_id/comments", () => {
