@@ -12,6 +12,7 @@ const {
   selectUserByUsername,
   updateComment,
   insertTopic,
+  insertArticle,
 } = require("../models/api-models");
 const fs = require("fs/promises");
 
@@ -79,7 +80,11 @@ exports.postTopic = (req, res, next) => {
 };
 
 exports.postArticle = (req, res, next) => {
-  res.status(201).send();
+  insertArticle(req.body)
+    .then((article) => {
+      res.status(201).send({ article });
+    })
+    .catch((err) => next(err));
 };
 
 exports.getCommentsById = (req, res, next) => {
