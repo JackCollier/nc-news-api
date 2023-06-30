@@ -104,6 +104,16 @@ exports.insertTopic = (topic) => {
     .then(({ rows }) => rows[0]);
 };
 
+exports.insertArticle = (article) => {
+  const { author, title, body, topic, article_img_url } = article;
+  return db
+    .query(
+      `INSERT INTO articles (title, topic, author, body, article_img_url) VALUES ($1, $2, $3, $4, $5) RETURNING *;`,
+      [title, topic, author, body, article_img_url]
+    )
+    .then(({ rows }) => rows[0]);
+};
+
 exports.selectCommentById = (article_id) => {
   return db
     .query(
