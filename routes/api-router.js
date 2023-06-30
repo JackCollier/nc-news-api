@@ -18,9 +18,9 @@ const {
   getUserByUsername,
 } = require("../controllers/api-controllers");
 
-router.route("/topics").get(getTopics).post(postTopic);
-
 router.route("/").get(getApi);
+
+router.route("/topics").get(getTopics).post(postTopic);
 
 router
   .route("/articles/:article_id")
