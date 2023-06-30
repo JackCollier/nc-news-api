@@ -214,6 +214,15 @@ describe("GET /api/articles", () => {
         expect(articles.length).toEqual(5);
       });
   });
+  test("should return 3 articles per page and by filtered by topic mitch", () => {
+    return request(app)
+      .get("/api/articles?topic=mitch&page=1&limit=3")
+      .expect(200)
+      .then(({ body }) => {
+        const { articles } = body;
+        expect(articles.length).toEqual(3);
+      });
+  });
 });
 
 describe("POST /api/articles/:article_id/comments", () => {
