@@ -124,5 +124,12 @@
         "created_at": "2020-04-06T12:17:00.000Z"
       }
     }
+  },
+  "POST /api/topics": {
+    "description": "adds a new topic to the db and returns it",
+    "queries": [],
+    "exampleResponse": {
+      "topic": { "slug": "blackberries", "description": "best berry" }
+    }
   }
 }
