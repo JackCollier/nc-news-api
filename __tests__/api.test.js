@@ -398,6 +398,10 @@ describe("PATCH /api/comments/:comment_id", () => {
     const patch = { inc_votes: 1 };
     return request(app).patch("/api/comments/notanid").send(patch).expect(400);
   });
+  test("should return a 404 status when passed a valid id which doesn't exist", () => {
+    const patch = { inc_votes: 1 };
+    return request(app).patch("/api/comments/1234").send(patch).expect(404);
+  });
 });
 
 describe("GET/api/users", () => {
