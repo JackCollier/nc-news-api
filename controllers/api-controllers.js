@@ -10,6 +10,7 @@ const {
   selectUsers,
   deleteComment,
   selectUserByUsername,
+  updateComment,
 } = require("../models/api-models");
 const fs = require("fs/promises");
 
@@ -98,7 +99,16 @@ exports.patchArticleById = (req, res, next) => {
 
 exports.patchCommentById = (req, res, next) => {
   const { comment_id } = req.params;
-  res.status(200).send();
+  const promises = [
+    updateComment(comment_id, req.body),
+    checkExists("comments", "comment_id", comment_id),
+  ];
+  Promise.all(promises)
+    .then((responseArray) => {
+      const comment = responseArray[0];
+      res.status(200).send({ comment });
+    })
+    .catch(next);
 };
 
 exports.getUsers = (req, res, next) => {
