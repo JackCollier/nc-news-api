@@ -377,6 +377,23 @@ describe("PATCH /api/comments/:comment_id", () => {
     const patch = { inc_votes: 1 };
     return request(app).patch("/api/comments/1").send(patch).expect(200);
   });
+  test("should return the comment with votes updated correctly", () => {
+    const patch = { inc_votes: 1 };
+    return request(app)
+      .patch("/api/comments/1")
+      .send(patch)
+      .then(({ body }) => {
+        const { comment } = body;
+        expect(comment).toEqual({
+          comment_id: 1,
+          body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+          article_id: 9,
+          author: "butter_bridge",
+          votes: 17,
+          created_at: "2020-04-06T12:17:00.000Z",
+        });
+      });
+  });
 });
 
 describe("GET/api/users", () => {
