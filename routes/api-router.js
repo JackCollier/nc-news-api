@@ -18,19 +18,30 @@ const {
   getUserByUsername,
 } = require("../controllers/api-controllers");
 
-router.get("/topics", getTopics);
-router.get("/", getApi);
-router.get("/articles/:article_id", getArticleById);
-router.get("/articles", getArticles);
-router.post("/articles/:article_id/comments", postComment);
-router.post("/topics", postTopic);
-router.post("/articles", postArticle);
-router.get("/articles/:article_id/comments", getCommentsById);
-router.patch("/articles/:article_id", patchArticleById);
-router.patch("/comments/:comment_id", patchCommentById);
-router.get("/users", getUsers);
-router.delete("/comments/:comment_id", deleteCommentById);
-router.delete("/articles/:article_id", deleteArticleById);
-router.get("/users/:username", getUserByUsername);
+router.route("/topics").get(getTopics).post(postTopic);
+
+router.route("/").get(getApi);
+
+router
+  .route("/articles/:article_id")
+  .get(getArticleById)
+  .patch(patchArticleById)
+  .delete(deleteArticleById);
+
+router.route("/articles").get(getArticles).post(postArticle);
+
+router
+  .route("/articles/:article_id/comments")
+  .get(getCommentsById)
+  .post(postComment);
+
+router
+  .route("/comments/:comment_id")
+  .patch(patchCommentById)
+  .delete(deleteCommentById);
+
+router.route("/users").get(getUsers);
+
+router.route("/users/:username").get(getUserByUsername);
 
 module.exports = router;
