@@ -106,12 +106,16 @@ exports.insertTopic = (topic) => {
 
 exports.insertArticle = (article) => {
   const { author, title, body, topic, article_img_url } = article;
-  return db
-    .query(
-      `INSERT INTO articles (title, topic, author, body, article_img_url) VALUES ($1, $2, $3, $4, $5) RETURNING *;`,
-      [title, topic, author, body, article_img_url]
-    )
-    .then(({ rows }) => rows[0]);
+  let query;
+  let queryValues;
+  if (article_img_url) {
+    query = `INSERT INTO articles (title, topic, author, body, article_img_url) VALUES ($1, $2, $3, $4, $5) RETURNING *;`;
+    queryValues = [title, topic, author, body, article_img_url];
+  } else {
+    query = `INSERT INTO articles (title, topic, author, body) VALUES ($1, $2, $3, $4) RETURNING *;`;
+    queryValues = [title, topic, author, body];
+  }
+  return db.query(query, queryValues).then(({ rows }) => rows[0]);
 };
 
 exports.selectCommentById = (article_id) => {
