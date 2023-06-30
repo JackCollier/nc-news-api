@@ -152,6 +152,10 @@ exports.deleteCommentById = (req, res, next) => {
     .catch(next);
 };
 
+exports.deleteArticleById = (req, res, next) => {
+  res.status(204).send();
+};
+
 exports.getUserByUsername = (req, res, next) => {
   const { username } = req.params;
   const promises = [
