@@ -591,7 +591,11 @@ describe("DELETE /api/comments/:comment_id", () => {
   });
 });
 
-describe("DELETE /api/articles/:article_id", () => {});
+describe("DELETE /api/articles/:article_id", () => {
+  test("should return a 204 status", () => {
+    return request(app).delete("/api/articles/1").expect(204);
+  });
+});
 
 describe("GET /api/users/:username", () => {
   test("should respond with a 200 status", () => {
