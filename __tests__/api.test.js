@@ -294,6 +294,9 @@ describe("POST /api/topics", () => {
         });
       });
   });
+  test("should respond with a 400 status when passed no body", () => {
+    return request(app).post("/api/topics").expect(400);
+  });
 });
 
 describe("GET /api/articles/:article_id/comments", () => {
