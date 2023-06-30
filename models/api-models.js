@@ -115,6 +115,16 @@ exports.updateArticle = (article_id, body) => {
     .then(({ rows }) => rows[0]);
 };
 
+exports.updateComment = (comment_id, body) => {
+  const { inc_votes } = body;
+  return db
+    .query(
+      `UPDATE comments SET votes = votes + $1 WHERE comment_id = $2 RETURNING *;`,
+      [inc_votes, comment_id]
+    )
+    .then(({ rows }) => rows[0]);
+};
+
 exports.selectUsers = () => {
   return db.query(`SELECT * FROM users;`).then(({ rows }) => {
     return rows;
