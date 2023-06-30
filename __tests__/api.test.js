@@ -591,6 +591,8 @@ describe("DELETE /api/comments/:comment_id", () => {
   });
 });
 
+describe("DELETE /api/articles/:article_id", () => {});
+
 describe("GET /api/users/:username", () => {
   test("should respond with a 200 status", () => {
     return request(app).get("/api/users/lurker").expect(200);
