@@ -394,6 +394,10 @@ describe("PATCH /api/comments/:comment_id", () => {
         });
       });
   });
+  test("should return a 400 status when passed an invalid id", () => {
+    const patch = { inc_votes: 1 };
+    return request(app).patch("/api/comments/notanid").send(patch).expect(400);
+  });
 });
 
 describe("GET/api/users", () => {
