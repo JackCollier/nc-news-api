@@ -11,6 +11,7 @@ const {
   deleteComment,
   selectUserByUsername,
   updateComment,
+  insertTopic,
 } = require("../models/api-models");
 const fs = require("fs/promises");
 
@@ -70,7 +71,11 @@ exports.postComment = (req, res, next) => {
 };
 
 exports.postTopic = (req, res, next) => {
-  res.status(201).send();
+  insertTopic(req.body)
+    .then((topic) => {
+      res.status(201).send({ topic });
+    })
+    .catch((err) => next(err));
 };
 
 exports.getCommentsById = (req, res, next) => {
