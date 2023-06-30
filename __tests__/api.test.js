@@ -402,6 +402,10 @@ describe("PATCH /api/comments/:comment_id", () => {
     const patch = { inc_votes: 1 };
     return request(app).patch("/api/comments/1234").send(patch).expect(404);
   });
+  test("should return a 400 status when passed an invalid body value", () => {
+    const patch = { inc_votes: "abc" };
+    return request(app).patch("/api/comments/1234").send(patch).expect(400);
+  });
 });
 
 describe("GET/api/users", () => {
