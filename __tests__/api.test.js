@@ -270,7 +270,15 @@ describe("POST /api/articles/:article_id/comments", () => {
   });
 });
 
-describe("POST /api/topics", () => {});
+describe("POST /api/topics", () => {
+  test("should return a 201 status", () => {
+    const post = {
+      slug: "blackberries",
+      description: "best berry",
+    };
+    return request(app).post("/api/topics").send(post).expect(201);
+  });
+});
 
 describe("GET /api/articles/:article_id/comments", () => {
   test("should return 200 status", () => {
