@@ -13,6 +13,7 @@ const {
   patchCommentById,
   postTopic,
   postArticle,
+  deleteArticleById,
 } = require("./controllers/api-controllers");
 const app = express();
 
@@ -41,6 +42,8 @@ app.patch("/api/comments/:comment_id", patchCommentById);
 app.get("/api/users", getUsers);
 
 app.delete("/api/comments/:comment_id", deleteCommentById);
+
+app.delete("/api/articles/:article_id", deleteArticleById);
 
 app.get("/api/users/:username", getUserByUsername);
 
