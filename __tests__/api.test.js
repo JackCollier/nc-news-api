@@ -306,6 +306,8 @@ describe("POST /api/topics", () => {
   });
 });
 
+describe("POST /api/articles", () => {});
+
 describe("GET /api/articles/:article_id/comments", () => {
   test("should return 200 status", () => {
     return request(app).get("/api/articles/1/comments").expect(200);
