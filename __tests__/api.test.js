@@ -372,7 +372,12 @@ describe("PATCH /api/articles/:article_id", () => {
   });
 });
 
-describe("PATCH /api/comments/:comment_id", () => {});
+describe("PATCH /api/comments/:comment_id", () => {
+  test("should return a 200 status", () => {
+    const patch = { inc_votes: 1 };
+    return request(app).patch("/api/comments/1").send(patch).expect(200);
+  });
+});
 
 describe("GET/api/users", () => {
   test("should respond with a 200 status", () => {
