@@ -309,7 +309,7 @@ describe("POST /api/topics", () => {
 describe("POST /api/articles", () => {
   test("should respond with a 201 status", () => {
     const post = {
-      author: "Jack",
+      author: "lurker",
       title: "cats matter",
       body: "There can never be enough cats",
       topic: "cats",
@@ -317,6 +317,32 @@ describe("POST /api/articles", () => {
         "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1443&q=80",
     };
     return request(app).post("/api/articles").send(post).expect(201);
+  });
+  test("should respond with the new article in correct foramt", () => {
+    const post = {
+      author: "lurker",
+      title: "cats matter",
+      body: "There can never be enough cats",
+      topic: "cats",
+      article_img_url:
+        "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1443&q=80",
+    };
+    return request(app)
+      .post("/api/articles")
+      .send(post)
+      .then(({ body }) => {
+        const { article } = body;
+        expect(article).toHaveProperty("article_id", 14);
+        expect(article).toHaveProperty("author", "lurker");
+        expect(article).toHaveProperty("topic", "cats");
+        expect(article).toHaveProperty(
+          "body",
+          "There can never be enough cats"
+        );
+        expect(article).toHaveProperty("title", "cats matter");
+        expect(article).toHaveProperty("votes", 0);
+        expect(article).toHaveProperty("created_at", expect.any(String));
+      });
   });
 });
 
