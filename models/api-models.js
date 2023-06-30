@@ -94,6 +94,16 @@ exports.insertComment = (comment, article_id) => {
     });
 };
 
+exports.insertTopic = (topic) => {
+  const { slug, description } = topic;
+  return db
+    .query(
+      `INSERT INTO topics (slug, description) VALUES ($1, $2) RETURNING *;`,
+      [slug, description]
+    )
+    .then(({ rows }) => rows[0]);
+};
+
 exports.selectCommentById = (article_id) => {
   return db
     .query(
