@@ -48,8 +48,9 @@ exports.getArticleById = (req, res, next) => {
 };
 
 exports.getArticles = (req, res, next) => {
-  const { topic, sort_by, order } = req.query;
-  const promises = [selectArticles(topic, sort_by, order)];
+  const { topic, sort_by, order, page, limit = 10 } = req.query;
+  const offset = (page - 1) * limit;
+  const promises = [selectArticles(topic, sort_by, order, limit, offset)];
   if (topic) {
     promises.push(checkExists("topics", "slug", topic));
   }
