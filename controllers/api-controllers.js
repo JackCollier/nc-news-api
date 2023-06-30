@@ -96,6 +96,11 @@ exports.patchArticleById = (req, res, next) => {
     .catch(next);
 };
 
+exports.patchCommentById = (req, res, next) => {
+  const { comment_id } = req.params;
+  res.status(200).send();
+};
+
 exports.getUsers = (req, res, next) => {
   selectUsers()
     .then((users) => {
