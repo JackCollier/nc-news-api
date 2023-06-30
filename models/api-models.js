@@ -30,7 +30,13 @@ exports.selectArticleById = (article_id) => {
     });
 };
 
-exports.selectArticles = (topic, sort_by = "created_at", order = "DESC") => {
+exports.selectArticles = (
+  topic,
+  sort_by = "created_at",
+  order = "DESC",
+  limit,
+  offset
+) => {
   let query = `
       SELECT 
       articles.article_id,
@@ -58,6 +64,7 @@ exports.selectArticles = (topic, sort_by = "created_at", order = "DESC") => {
     "comment_count",
   ];
 
+  // console.log(limit, offset);
   const validOrder = ["ASC", "DESC"];
 
   if (!validSortBy.includes(sort_by) || !validOrder.includes(order)) {
@@ -72,9 +79,18 @@ exports.selectArticles = (topic, sort_by = "created_at", order = "DESC") => {
   }
 
   if (sort_by) {
-    query += ` GROUP BY
-      articles.article_id`;
+    query += ` GROUP BY articles.article_id`;
     query += ` ORDER BY ${sort_by} ${order}`;
+  }
+
+  if (limit) {
+    query += ` LIMIT $${queryValues.length + 1}`;
+    queryValues.push(limit);
+  }
+
+  if (offset) {
+    query += ` OFFSET $${queryValues.length + 1}`;
+    queryValues.push(offset);
   }
 
   return db.query(query, queryValues).then(({ rows }) => {
