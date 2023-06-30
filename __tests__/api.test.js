@@ -306,7 +306,19 @@ describe("POST /api/topics", () => {
   });
 });
 
-describe("POST /api/articles", () => {});
+describe("POST /api/articles", () => {
+  test("should respond with a 201 status", () => {
+    const post = {
+      author: "Jack",
+      title: "cats matter",
+      body: "There can never be enough cats",
+      topic: "cats",
+      article_img_url:
+        "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1443&q=80",
+    };
+    return request(app).post("/api/articles").send(post).expect(201);
+  });
+});
 
 describe("GET /api/articles/:article_id/comments", () => {
   test("should return 200 status", () => {
