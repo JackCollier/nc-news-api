@@ -13,6 +13,7 @@ const {
   updateComment,
   insertTopic,
   insertArticle,
+  deleteArticle,
 } = require("../models/api-models");
 const fs = require("fs/promises");
 
@@ -153,7 +154,16 @@ exports.deleteCommentById = (req, res, next) => {
 };
 
 exports.deleteArticleById = (req, res, next) => {
-  res.status(204).send();
+  const { article_id } = req.params;
+  const promises = [
+    deleteArticle(article_id),
+    checkExists("articles", "article_id", article_id),
+  ];
+  Promise.all(promises)
+    .then(() => {
+      res.status(204).send();
+    })
+    .catch(next);
 };
 
 exports.getUserByUsername = (req, res, next) => {
