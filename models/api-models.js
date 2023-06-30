@@ -38,6 +38,7 @@ exports.selectArticles = (topic, sort_by = "created_at", order = "DESC") => {
       articles.created_at,
       articles.topic,
       articles.author,
+      articles.votes,
       articles.article_img_url,
       COALESCE(COUNT(comments.article_id), 0) AS comment_count
       FROM
