@@ -78,6 +78,10 @@ exports.postTopic = (req, res, next) => {
     .catch((err) => next(err));
 };
 
+exports.postArticle = (req, res, next) => {
+  res.status(201).send();
+};
+
 exports.getCommentsById = (req, res, next) => {
   const { article_id } = req.params;
   const promises = [
