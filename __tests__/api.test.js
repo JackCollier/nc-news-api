@@ -278,6 +278,22 @@ describe("POST /api/topics", () => {
     };
     return request(app).post("/api/topics").send(post).expect(201);
   });
+  test("should return the new topic", () => {
+    const post = {
+      slug: "blackberries",
+      description: "best berry",
+    };
+    return request(app)
+      .post("/api/topics")
+      .send(post)
+      .then(({ body }) => {
+        const { topic } = body;
+        expect(topic).toEqual({
+          slug: "blackberries",
+          description: "best berry",
+        });
+      });
+  });
 });
 
 describe("GET /api/articles/:article_id/comments", () => {
