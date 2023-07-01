@@ -223,6 +223,9 @@ describe("GET /api/articles", () => {
         expect(articles.length).toEqual(3);
       });
   });
+  test("should return a 400 status if passed an invalid limit", () => {
+    return request(app).get("/api/articles?&page=1&limit=abc").expect(400);
+  });
 });
 
 describe("POST /api/articles/:article_id/comments", () => {
