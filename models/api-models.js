@@ -64,7 +64,6 @@ exports.selectArticles = (
     "comment_count",
   ];
 
-  // console.log(limit, offset);
   const validOrder = ["ASC", "DESC"];
 
   if (!validSortBy.includes(sort_by) || !validOrder.includes(order)) {
