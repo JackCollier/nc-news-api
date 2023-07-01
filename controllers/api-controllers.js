@@ -31,9 +31,7 @@ exports.getApi = (req, res, next) => {
     .then((data) => {
       res.status(200).send(JSON.parse(data));
     })
-    .catch((err) => {
-      next(err);
-    });
+    .catch((err) => next(err));
 };
 
 exports.getArticleById = (req, res, next) => {
@@ -42,9 +40,7 @@ exports.getArticleById = (req, res, next) => {
     .then((article) => {
       res.status(200).send({ article });
     })
-    .catch((err) => {
-      next(err);
-    });
+    .catch((err) => next(err));
 };
 
 exports.getArticles = (req, res, next) => {
@@ -67,9 +63,7 @@ exports.postComment = (req, res, next) => {
     .then((comment) => {
       res.status(201).send({ comment });
     })
-    .catch((err) => {
-      next(err);
-    });
+    .catch((err) => next(err));
 };
 
 exports.postTopic = (req, res, next) => {
@@ -135,9 +129,7 @@ exports.getUsers = (req, res, next) => {
     .then((users) => {
       res.status(200).send({ users });
     })
-    .catch((err) => {
-      next(err);
-    });
+    .catch((err) => next(err));
 };
 
 exports.deleteCommentById = (req, res, next) => {
