@@ -1,9 +1,7 @@
 const db = require("../db/connection");
 
 exports.selectTopics = () => {
-  return db.query("SELECT * FROM topics;").then(({ rows }) => {
-    return rows;
-  });
+  return db.query("SELECT * FROM topics;").then(({ rows }) => rows);
 };
 
 exports.selectArticleById = (article_id) => {
@@ -86,9 +84,7 @@ exports.insertComment = (comment, article_id) => {
       `INSERT INTO comments (author, body, article_id) VALUES ($1, $2, $3) RETURNING *;`,
       [username, body, article_id]
     )
-    .then(({ rows }) => {
-      return rows[0];
-    });
+    .then(({ rows }) => rows[0]);
 };
 
 exports.insertTopic = (topic) => {
@@ -121,9 +117,7 @@ exports.selectCommentById = (article_id) => {
       `SELECT * FROM comments WHERE article_id = $1 ORDER BY created_at ASC`,
       [article_id]
     )
-    .then(({ rows }) => {
-      return rows;
-    });
+    .then(({ rows }) => rows);
 };
 
 exports.updateArticle = (article_id, body) => {
@@ -147,9 +141,7 @@ exports.updateComment = (comment_id, body) => {
 };
 
 exports.selectUsers = () => {
-  return db.query(`SELECT * FROM users;`).then(({ rows }) => {
-    return rows;
-  });
+  return db.query(`SELECT * FROM users;`).then(({ rows }) => rows);
 };
 
 exports.deleteComment = (comment_id) => {
@@ -163,7 +155,5 @@ exports.deleteArticle = (article_id) => {
 exports.selectUserByUsername = (username) => {
   return db
     .query(`SELECT * FROM users WHERE username = $1`, [username])
-    .then(({ rows }) => {
-      return rows[0];
-    });
+    .then(({ rows }) => rows[0]);
 };
