@@ -1,16 +1,16 @@
 {
   "GET /api": {
-    "description": "serves up a json representation of all the available endpoints of the api"
+    "description": "Serves up a JSON representation of all the available endpoints of the API"
   },
   "GET /api/topics": {
-    "description": "serves an array of all topics",
+    "description": "Serves an array of all topics",
     "queries": [],
     "exampleResponse": {
       "topics": [{ "slug": "football", "description": "Footie!" }]
     }
   },
   "GET /api/articles": {
-    "description": "serves an array of all topics",
+    "description": "Serves an array of articles",
     "queries": [
       "topic (optional): Filter articles by topic",
       "sort_by (optional): Sort articles by a specific field",
@@ -31,7 +31,7 @@
     }
   },
   "GET /api/articles/:article_id": {
-    "description": "serves an article corresponding to passed id",
+    "description": "Serves an article corresponding to the provided ID",
     "queries": [],
     "exampleResponse": {
       "article": {
@@ -48,7 +48,7 @@
     }
   },
   "GET /api/articles/:article_id/comments": {
-    "description": "serves all comments corresponding to passed id",
+    "description": "Serves all comments corresponding to the provided article ID",
     "queries": [],
     "exampleResponse": {
       "comments": {
@@ -61,7 +61,7 @@
     }
   },
   "POST /api/articles/:article_id/comments": {
-    "description": "adds a new comment to the db attached with an article by id",
+    "description": "Adds a new comment attached to an article by ID",
     "queries": [],
     "exampleResponse": {
       "comment": {
@@ -74,7 +74,7 @@
     }
   },
   "PATCH /api/articles/:article_id": {
-    "description": "updates article vote count and returns said article",
+    "description": "Updates the vote count of an article and returns the updated article",
     "queries": [],
     "exampleResponse": {
       "article": {
@@ -89,12 +89,12 @@
     }
   },
   "DELETE /api/comments/:comment_id": {
-    "description": "deletes comment through comment id",
+    "description": "Deletes a comment using the provided comment ID",
     "queries": [],
     "exampleResponse": {}
   },
   "GET /api/users": {
-    "description": "get all users in an array",
+    "description": "Retrieves an array of all users",
     "queries": [],
     "exampleResponse": {
       "users": {
@@ -105,7 +105,7 @@
     }
   },
   "GET /api/users/:username": {
-    "description": "get user object by username",
+    "description": "Retrieves a user object by username",
     "queries": [],
     "exampleResponse": {
       "user": {
@@ -116,7 +116,7 @@
     }
   },
   "PATCH /api/comments/:comment_id": {
-    "description": "updates comments vote count and returns said comment",
+    "description": "Updates the vote count of a comment and returns the updated comment",
     "queries": [],
     "exampleResponse": {
       "comment": {
@@ -130,14 +130,14 @@
     }
   },
   "POST /api/topics": {
-    "description": "adds a new topic to the db and returns it",
+    "description": "Adds a new topic to the database and returns it",
     "queries": [],
     "exampleResponse": {
       "topic": { "slug": "blackberries", "description": "best berry" }
     }
   },
   "POST /api/articles": {
-    "description": "adds a new article to the db and returns it",
+    "description": "Adds a new article to the database and returns it",
     "queries": [],
     "exampleResponse": {
       "article": {
@@ -153,7 +153,7 @@
     }
   },
   "DELETE /api/articles/:article_id": {
-    "description": "deletes article through article id",
+    "description": "Deletes article through article id",
     "queries": [],
     "exampleResponse": {}
   }
