@@ -25,7 +25,13 @@ exports.selectArticleById = (article_id) => {
     });
 };
 
-exports.selectArticles = (topic, sort_by = "created_at", order = "DESC") => {
+exports.selectArticles = (
+  topic,
+  sort_by = "created_at",
+  order = "DESC",
+  limit,
+  offset
+) => {
   let query = `
       SELECT 
       articles.article_id,
@@ -41,6 +47,12 @@ exports.selectArticles = (topic, sort_by = "created_at", order = "DESC") => {
       LEFT JOIN
       comments ON articles.article_id = comments.article_id
       `;
+
+  const countQuery = `
+    SELECT COUNT(*) AS total_count
+    FROM articles
+    LEFT JOIN comments ON articles.article_id = comments.article_id
+  `;
 
   const validSortBy = [
     "article_id",
@@ -67,14 +79,30 @@ exports.selectArticles = (topic, sort_by = "created_at", order = "DESC") => {
   }
 
   if (sort_by) {
-    query += ` GROUP BY
-      articles.article_id`;
+    query += ` GROUP BY articles.article_id`;
     query += ` ORDER BY ${sort_by} ${order}`;
   }
 
-  return db.query(query, queryValues).then(({ rows }) => {
-    return rows;
-  });
+  if (limit) {
+    query += ` LIMIT $${queryValues.length + 1}`;
+    queryValues.push(limit);
+  }
+
+  if (offset) {
+    query += ` OFFSET $${queryValues.length + 1}`;
+    queryValues.push(offset);
+  }
+
+  return Promise.all([db.query(query, queryValues), db.query(countQuery)]).then(
+    ([
+      { rows },
+      {
+        rows: [{ total_count }],
+      },
+    ]) => {
+      return { articles: rows, total_count };
+    }
+  );
 };
 
 exports.insertComment = (comment, article_id) => {
