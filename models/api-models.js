@@ -53,6 +53,12 @@ exports.selectArticles = (
       comments ON articles.article_id = comments.article_id
       `;
 
+  const countQuery = `
+    SELECT COUNT(*) AS total_count
+    FROM articles
+    LEFT JOIN comments ON articles.article_id = comments.article_id
+  `;
+
   const validSortBy = [
     "article_id",
     "title",
@@ -92,9 +98,16 @@ exports.selectArticles = (
     queryValues.push(offset);
   }
 
-  return db.query(query, queryValues).then(({ rows }) => {
-    return rows;
-  });
+  return Promise.all([db.query(query, queryValues), db.query(countQuery)]).then(
+    ([
+      { rows },
+      {
+        rows: [{ total_count }],
+      },
+    ]) => {
+      return { articles: rows, total_count };
+    }
+  );
 };
 
 exports.insertComment = (comment, article_id) => {
