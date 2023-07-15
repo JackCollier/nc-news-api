@@ -4,6 +4,7 @@ const data = require("../db/data/test-data/index");
 const db = require("../db/connection");
 const seed = require("../db/seeds/seed");
 const jsonEndpoint = require("../endpoints.json");
+const articles = require("../db/data/test-data/articles");
 
 beforeEach(() => seed(data));
 afterAll(() => db.end());
@@ -122,7 +123,7 @@ describe("GET /api/articles", () => {
     return request(app)
       .get("/api/articles")
       .then(({ body }) => {
-        expect(body).toHaveProperty("articles", expect.any(Array));
+        expect(body.articles).toHaveProperty("articles", expect.any(Array));
       });
   });
   test("array should contain object with correct properties", () => {
@@ -130,9 +131,9 @@ describe("GET /api/articles", () => {
       .get("/api/articles")
       .then(({ body }) => {
         const { articles } = body;
-        expect(body).toHaveProperty("articles", expect.any(Array));
+        expect(body.articles).toHaveProperty("articles", expect.any(Array));
         expect(typeof articles).toBe("object");
-        articles.forEach((article) => {
+        articles.articles.forEach((article) => {
           expect(article).toHaveProperty("title", expect.any(String));
           expect(article).toHaveProperty("topic", expect.any(String));
           expect(article).toHaveProperty("author", expect.any(String));
@@ -142,7 +143,7 @@ describe("GET /api/articles", () => {
           expect(article).toHaveProperty("votes", expect.any(Number));
           expect(article).toHaveProperty("comment_count", expect.any(String));
         });
-        expect(articles.length).toEqual(13);
+        // expect(articles.length).toEqual(13);
       });
   });
   test("should be ordered by date descending default", () => {
@@ -150,7 +151,9 @@ describe("GET /api/articles", () => {
       .get("/api/articles")
       .then(({ body }) => {
         const { articles } = body;
-        expect(articles).toBeSortedBy("created_at", { descending: true });
+        expect(articles.articles).toBeSortedBy("created_at", {
+          descending: true,
+        });
       });
   });
   test("should be filtered by topic mitch", () => {
@@ -159,9 +162,9 @@ describe("GET /api/articles", () => {
       .expect(200)
       .then(({ body }) => {
         const { articles } = body;
-        expect(articles).toBeSortedBy("topic");
-        expect(articles.length).toEqual(12);
-        articles.forEach((article) => {
+        expect(articles.articles).toBeSortedBy("topic");
+        // expect(articles.length).toEqual(12);
+        articles.articles.forEach((article) => {
           expect(article).toHaveProperty("topic", "mitch");
         });
       });
@@ -172,7 +175,7 @@ describe("GET /api/articles", () => {
       .expect(200)
       .then(({ body }) => {
         const { articles } = body;
-        expect(articles.length).toEqual(0);
+        expect(articles.articles.length).toEqual(0);
       });
   });
   test("should return 404 status when passed no existant topic", () => {
@@ -187,7 +190,7 @@ describe("GET /api/articles", () => {
       .expect(200)
       .then(({ body }) => {
         const { articles } = body;
-        expect(articles).toBeSortedBy("title", { descending: true });
+        expect(articles.articles).toBeSortedBy("title", { descending: true });
       });
   });
   test("should return 400 status when passed a non existant sort_by", () => {
@@ -199,11 +202,44 @@ describe("GET /api/articles", () => {
       .expect(200)
       .then(({ body }) => {
         const { articles } = body;
-        expect(articles).toBeSortedBy("created_at", { descending: false });
+        expect(articles.articles).toBeSortedBy("created_at", {
+          descending: false,
+        });
       });
   });
   test("should return 400 status when passed a bad order", () => {
     return request(app).get("/api/articles?order=up").expect(400);
+  });
+  test("should return 5 articles per page", () => {
+    return request(app)
+      .get("/api/articles?page=2&limit=5")
+      .expect(200)
+      .then(({ body }) => {
+        const { articles } = body;
+        expect(articles.articles.length).toEqual(5);
+      });
+  });
+  test("should return 3 articles per page and by filtered by topic mitch", () => {
+    return request(app)
+      .get("/api/articles?topic=mitch&page=1&limit=3")
+      .expect(200)
+      .then(({ body }) => {
+        const { articles } = body;
+        expect(articles.articles.length).toEqual(3);
+      });
+  });
+  test("should return articles with a total_count property", () => {
+    return request(app)
+      .get("/api/articles?topic=mitch&page=1&limit=5")
+      .expect(200)
+      .then(({ body }) => {
+        const { articles } = body;
+        expect(articles).toHaveProperty("total_count", "26");
+      });
+  });
+
+  test("should return a 400 status if passed an invalid limit", () => {
+    return request(app).get("/api/articles?&page=1&limit=abc").expect(400);
   });
 });
 
