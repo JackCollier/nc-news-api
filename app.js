@@ -13,12 +13,8 @@ app.use((err, req, res, next) => {
   } else if (err.status && err.msg) {
     res.status(err.status).send(err.msg);
   } else {
-    next(err);
+    res.status(404).send({ msg: "Not Found" });
   }
-});
-
-app.use((err, req, res, next) => {
-  res.status(404).send({ msg: "Not Found" });
 });
 
 module.exports = app;
