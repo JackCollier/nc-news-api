@@ -135,15 +135,11 @@ exports.getUsers = (req, res, next) => {
 
 exports.deleteCommentById = (req, res, next) => {
   const { comment_id } = req.params;
-  const promises = [
-    deleteComment(comment_id),
-    checkExists("comments", "comment_id", comment_id),
-  ];
-  Promise.all(promises)
+  deleteComment(comment_id)
     .then(() => {
       res.status(204).send();
     })
-    .catch(next);
+    .catch((err) => next(err));
 };
 
 exports.deleteArticleById = (req, res, next) => {
