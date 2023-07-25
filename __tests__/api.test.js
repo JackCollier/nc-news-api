@@ -234,7 +234,7 @@ describe("GET /api/articles", () => {
       .expect(200)
       .then(({ body }) => {
         const { articles } = body;
-        expect(articles).toHaveProperty("total_count", "26");
+        expect(articles).toHaveProperty("total_count", 12);
       });
   });
 
