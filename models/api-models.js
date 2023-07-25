@@ -48,10 +48,9 @@ exports.selectArticles = (
       comments ON articles.article_id = comments.article_id
       `;
 
-  const countQuery = `
+  let countQuery = `
     SELECT COUNT(*) AS total_count
     FROM articles
-    LEFT JOIN comments ON articles.article_id = comments.article_id
   `;
 
   const validSortBy = [
@@ -72,10 +71,13 @@ exports.selectArticles = (
   }
 
   const queryValues = [];
+  const countQueryValues = [];
 
   if (topic) {
-    query += ` WHERE articles.topic = $1`;
+    query += ` WHERE articles.topic = $${queryValues.length + 1}`;
+    countQuery += ` WHERE articles.topic = $${countQueryValues.length + 1}`;
     queryValues.push(topic);
+    countQueryValues.push(topic);
   }
 
   if (sort_by) {
@@ -93,14 +95,17 @@ exports.selectArticles = (
     queryValues.push(offset);
   }
 
-  return Promise.all([db.query(query, queryValues), db.query(countQuery)]).then(
+  return Promise.all([
+    db.query(query, queryValues),
+    db.query(countQuery, countQueryValues),
+  ]).then(
     ([
       { rows },
       {
         rows: [{ total_count }],
       },
     ]) => {
-      return { articles: rows, total_count };
+      return { articles: rows, total_count: parseInt(total_count) };
     }
   );
 };
