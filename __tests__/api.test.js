@@ -237,7 +237,15 @@ describe("GET /api/articles", () => {
         expect(articles).toHaveProperty("total_count", 12);
       });
   });
-
+  test("should return articles with a total_count property", () => {
+    return request(app)
+      .get("/api/articles?topic=cats&page=1&limit=5")
+      .expect(200)
+      .then(({ body }) => {
+        const { articles } = body;
+        expect(articles).toHaveProperty("total_count", 1);
+      });
+  });
   test("should return a 400 status if passed an invalid limit", () => {
     return request(app).get("/api/articles?&page=1&limit=abc").expect(400);
   });
